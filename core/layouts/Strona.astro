@@ -1,0 +1,32 @@
+---
+import '../styles/base.css';
+import Naglowek from '../components/Naglowek.astro';
+import Stopka from '../components/Stopka.astro';
+import { site } from '../lib/site';
+
+interface Props {
+  tytul?: string;
+  opis?: string;
+}
+
+const { tytul, opis = site.opis } = Astro.props;
+const pelnyTytul = tytul ? `${tytul} · ${site.nazwa}` : site.nazwa;
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pelnyTytul}</title>
+    <meta name="description" content={opis} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <Naglowek />
+    <main>
+      <slot />
+    </main>
+    <Stopka />
+  </body>
+</html>

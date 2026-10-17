@@ -1,0 +1,26 @@
+---
+import { site } from '../lib/site';
+
+const { email, telefon, adres } = site.kontakt;
+---
+
+<footer class="stopka">
+  <div class="zhp-kontener">
+    <p><strong>{site.nazwa}</strong> · Związek Harcerstwa Polskiego</p>
+    {adres && <p>{adres}</p>}
+    {email && <p><a href={`mailto:${email}`}>{email}</a></p>}
+    {telefon && <p><a href={`tel:${telefon.replace(/\s/g, '')}`}>{telefon}</a></p>}
+  </div>
+</footer>
+
+<style>
+  .stopka {
+    border-top: 1px solid var(--zhp-kolor-obramowania);
+    color: var(--zhp-kolor-tekstu-drugorzedny);
+    padding-block: var(--zhp-odstep-4);
+    font-size: 0.9rem;
+  }
+  p {
+    margin: var(--zhp-odstep-1) 0;
+  }
+</style>

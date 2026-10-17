@@ -1,0 +1,18 @@
+---
+import Strona from '@core/layouts/Strona.astro';
+import { site } from '@core/lib/site';
+---
+
+<Strona>
+  <section class="zhp-kontener powitanie">
+    <h1>Czuwaj! 👋</h1>
+    <p>To jest strona: <strong>{site.nazwa}</strong>.</p>
+    <p>Szkielet szablonu działa. Uruchom <code>/zhp-zbuduj-strone</code>, żeby zbudować właściwą stronę.</p>
+  </section>
+</Strona>
+
+<style>
+  .powitanie {
+    padding-block: var(--zhp-odstep-5);
+  }
+</style>

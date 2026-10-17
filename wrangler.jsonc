@@ -1,0 +1,15 @@
+// Plik szablonu (upstream). Nazwa Workera NIE jest tu ustawiana —
+// CI bierze ją z nazwy repozytorium (np. pagegenerator-hufiec-x) i przekazuje przez --name,
+// dzięki czemu ten plik jest identyczny we wszystkich forkach i nie powoduje konfliktów przy merge.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "pagegenerator-lokalnie",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "workers_dev": true,
+  "preview_urls": true
+}

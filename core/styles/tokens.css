@@ -1,0 +1,25 @@
+/*
+ * Design tokeny identyfikacji wizualnej ZHP.
+ * Kod jednostki (src/) używa WYŁĄCZNIE tych zmiennych — bez własnych kolorów i fontów.
+ * Wartości są tymczasowe; docelowe kolory i typografia przyjdą z księgi znaku.
+ */
+:root {
+  --zhp-kolor-podstawowy: #4a7a2c;
+  --zhp-kolor-podstawowy-ciemny: #2f5419;
+  --zhp-kolor-tla: #ffffff;
+  --zhp-kolor-tekstu: #1f2421;
+  --zhp-kolor-tekstu-drugorzedny: #5b635e;
+  --zhp-kolor-obramowania: #dde3dc;
+
+  --zhp-font-tekst: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --zhp-font-naglowki: var(--zhp-font-tekst);
+
+  --zhp-odstep-1: 0.25rem;
+  --zhp-odstep-2: 0.5rem;
+  --zhp-odstep-3: 1rem;
+  --zhp-odstep-4: 2rem;
+  --zhp-odstep-5: 4rem;
+
+  --zhp-szerokosc-tresci: 72rem;
+  --zhp-promien: 0.5rem;
+}

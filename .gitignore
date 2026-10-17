@@ -1,0 +1,21 @@
+# build
+dist/
+.astro/
+
+# zależności
+node_modules/
+
+# Cloudflare / wrangler
+.wrangler/
+.dev.vars*
+
+# lokalne ustawienia
+.env
+.env.*
+.claude/settings.local.json
+CLAUDE.local.md
+.zhp-tryb-szablonu
+
+# system
+.DS_Store
+Thumbs.db
