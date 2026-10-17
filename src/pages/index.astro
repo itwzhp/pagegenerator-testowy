@@ -1,18 +1,100 @@
 ---
 import Strona from '@core/layouts/Strona.astro';
 import { site } from '@core/lib/site';
+import Karty from '../components/Karty.astro';
+import komenda from '../../content/komenda.json';
+import druzyny from '../../content/druzyny.json';
+
+const { email, telefon, adres } = site.kontakt;
 ---
 
 <Strona>
-  <section class="zhp-kontener powitanie">
-    <h1>Czuwaj! 👋</h1>
-    <p>To jest strona: <strong>{site.nazwa}</strong>.</p>
-    <p>Szkielet szablonu działa. Uruchom <code>/zhp-zbuduj-strone</code>, żeby zbudować właściwą stronę.</p>
+  <section class="powitanie">
+    <div class="zhp-kontener">
+      <h1>{site.nazwa}</h1>
+      <p class="lead">{site.opis}</p>
+      <nav class="skroty" aria-label="Na tej stronie">
+        <a href="#komenda">Komenda</a>
+        <a href="#druzyny">Drużyny</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+    </div>
+  </section>
+
+  <Karty
+    id="komenda"
+    naglowek="Komenda hufca"
+    karty={komenda.map((o) => ({ tytul: `${o.stopien} ${o.imieNazwisko}`, podtytul: o.funkcja }))}
+  />
+
+  <Karty
+    id="druzyny"
+    naglowek="Nasze drużyny"
+    karty={druzyny.map((d) => ({ tytul: d.nazwa, podtytul: d.rodzaj }))}
+  />
+
+  <section class="zhp-kontener sekcja" id="kontakt" aria-labelledby="kontakt-naglowek">
+    <h2 id="kontakt-naglowek">Kontakt</h2>
+    <dl class="kontakt">
+      {adres && (<><dt>Siedziba</dt><dd>{adres}</dd></>)}
+      {email && (<><dt>E-mail</dt><dd><a href={`mailto:${email}`}>{email}</a></dd></>)}
+      {telefon && (<><dt>Telefon</dt><dd><a href={`tel:${telefon.replace(/\s/g, '')}`}>{telefon}</a></dd></>)}
+    </dl>
+    {
+      site.linki.length > 0 && (
+        <>
+          <h3>Przydatne linki</h3>
+          <ul>
+            {site.linki.map((l) => (
+              <li><a href={l.url}>{l.etykieta}</a></li>
+            ))}
+          </ul>
+        </>
+      )
+    }
   </section>
 </Strona>
 
 <style>
   .powitanie {
+    background: var(--zhp-kolor-podstawowy-ciemny);
+    color: var(--zhp-kolor-tla);
     padding-block: var(--zhp-odstep-5);
+  }
+  .powitanie h1 {
+    margin-top: 0;
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    overflow-wrap: break-word;
+  }
+  .lead {
+    font-size: 1.15rem;
+    max-width: 40rem;
+  }
+  .skroty {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zhp-odstep-3);
+    margin-top: var(--zhp-odstep-4);
+  }
+  .skroty a {
+    color: var(--zhp-kolor-tla);
+    border: 1px solid var(--zhp-kolor-tla);
+    border-radius: var(--zhp-promien);
+    padding: var(--zhp-odstep-2) var(--zhp-odstep-3);
+    text-decoration: none;
+  }
+  .sekcja {
+    padding-block: var(--zhp-odstep-4);
+  }
+  .kontakt {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--zhp-odstep-2) var(--zhp-odstep-4);
+  }
+  .kontakt dt {
+    font-weight: 700;
+  }
+  .kontakt dd {
+    margin: 0;
   }
 </style>
