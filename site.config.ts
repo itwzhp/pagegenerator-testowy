@@ -16,7 +16,7 @@ const config: SiteConfigInput = {
     { etykieta: 'Kalendarz', href: '/wydarzenia' },
     { etykieta: 'O nas', href: '/o-nas' },
     { etykieta: 'Drużyny', href: '/jednostki' },
-    { etykieta: 'Komenda', href: '/komenda' },
+    { etykieta: 'Władze', href: '/komenda' },
     { etykieta: 'Dla rodziców', href: '/dla-rodzicow' },
     { etykieta: 'Kontakt', href: '/kontakt' },
   ],
