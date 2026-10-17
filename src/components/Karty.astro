@@ -1,0 +1,55 @@
+---
+// Sekcja z nagłówkiem i siatką kart. Używana dla składu komendy i listy drużyn.
+interface Karta {
+  tytul: string;
+  podtytul?: string;
+}
+
+interface Props {
+  id: string;
+  naglowek: string;
+  karty: Karta[];
+}
+
+const { id, naglowek, karty } = Astro.props;
+---
+
+<section class="zhp-kontener sekcja" id={id} aria-labelledby={`${id}-naglowek`}>
+  <h2 id={`${id}-naglowek`}>{naglowek}</h2>
+  <ul class="siatka">
+    {
+      karty.map((k) => (
+        <li class="karta">
+          <strong>{k.tytul}</strong>
+          {k.podtytul && <span>{k.podtytul}</span>}
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .sekcja {
+    padding-block: var(--zhp-odstep-4);
+  }
+  .siatka {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--zhp-odstep-3);
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  }
+  .karta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--zhp-odstep-1);
+    padding: var(--zhp-odstep-3);
+    border: 1px solid var(--zhp-kolor-obramowania);
+    border-left: 4px solid var(--zhp-kolor-podstawowy);
+    border-radius: var(--zhp-promien);
+  }
+  .karta span {
+    color: var(--zhp-kolor-tekstu-drugorzedny);
+  }
+</style>

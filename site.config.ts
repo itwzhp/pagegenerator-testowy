@@ -3,13 +3,18 @@
 import type { SiteConfigInput } from './core/lib/site-schema';
 
 const config: SiteConfigInput = {
-  nazwa: 'Hufiec ZHP Przykładowo',
+  nazwa: 'Hufiec Testowy ZHP Chorągiew Gdańska',
   typ: 'hufiec',
-  opis: 'Strona jednostki Związku Harcerstwa Polskiego.',
+  opis: 'Hufiec Testowy, powstał tylko jako przykładowy na użytek testów.',
   kontakt: {
-    email: 'hufiec@example.org',
+    email: 'test@zhp.pl',
+    telefon: '+48 333 333 333',
+    adres: 'ul. Dworcowa 13A/9, 83-300 Kartuzy',
   },
-  linki: [],
+  linki: [
+    { etykieta: 'Związek Harcerstwa Polskiego', url: 'https://zhp.pl' },
+    { etykieta: 'Chorągiew Gdańska ZHP', url: 'https://gdansk.zhp.pl' },
+  ],
 };
 
 export default config;
