@@ -1,0 +1,63 @@
+---
+// Widok pojedynczej aktualności. Użycie w src/pages/aktualnosci/[...slug].astro:
+//   export const getStaticPaths = sciezkiAktualnosci;  (z core/lib/tresci)
+//   <Aktualnosc wpis={Astro.props.wpis} />
+import { render } from 'astro:content';
+import Podstrona from '../layouts/Podstrona.astro';
+import Foto from '../components/Foto.astro';
+import ZnakGrupy from '../components/ZnakGrupy.astro';
+import Przycisk from '../components/Przycisk.astro';
+import { dataIso, formatujDate } from '../lib/format';
+import type { Aktualnosc } from '../lib/tresci';
+
+interface Props {
+  wpis: Aktualnosc;
+}
+
+const { wpis } = Astro.props;
+const d = wpis.data;
+const { Content } = await render(wpis);
+---
+
+<Podstrona tytul={d.tytul} opis={d.zajawka} obraz={d.zdjecie?.src} typ="article">
+  <article class="zhp-wpis">
+    <p class="zhp-meta">
+      {d.kategoria && <span class="zhp-eyebrow">{d.kategoria}</span>}
+      {d.kategoria && ' · '}
+      <time datetime={dataIso(d.data)}>{formatujDate(d.data)}</time>
+      {d.autor && ` · ${d.autor}`}
+    </p>
+    {
+      d.grupy.length > 0 && (
+        <p class="zhp-wpis-grupy">
+          {d.grupy.map((g) => (
+            <ZnakGrupy grupa={g} rozmiar="maly" wiek={false} />
+          ))}
+        </p>
+      )
+    }
+    <p class="zhp-lead zhp-tekst">{d.zajawka}</p>
+    {d.zdjecie && <Foto zdjecie={d.zdjecie} priorytet class="zhp-wpis-zdjecie" />}
+    <div class="zhp-proza">
+      <Content />
+    </div>
+    <p class="zhp-wpis-powrot">
+      <Przycisk href="/aktualnosci" wariant="drugorzedny">Więcej aktualności</Przycisk>
+    </p>
+  </article>
+</Podstrona>
+
+<style>
+  .zhp-wpis-grupy {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zhp-space-4);
+  }
+  .zhp-wpis :global(.zhp-wpis-zdjecie) {
+    max-width: 960px;
+    margin-bottom: var(--zhp-space-8);
+  }
+  .zhp-wpis-powrot {
+    margin-top: var(--zhp-space-12);
+  }
+</style>

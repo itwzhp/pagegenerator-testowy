@@ -1,0 +1,27 @@
+---
+// Pas tytułowy (DESIGN.md §10 SectionBand): zielony pas od lewej krawędzi ekranu, biały tytuł WERSALIKAMI.
+// Umieszczaj POZA .zhp-kontener (pas musi dotykać krawędzi ekranu). Najwyżej jeden na ekran.
+interface Props {
+  /** h1 dla tytułu podstrony (domyślnie), h2 dla głównych sekcji długiej strony. */
+  poziom?: 1 | 2;
+  rozmiar?: 'duzy' | 'maly';
+  /** `ciemny` (green-dark), gdy potrzebny kontrast AA dla mniejszego tekstu. */
+  kolor?: 'zielony' | 'ciemny';
+  id?: string;
+}
+
+const { poziom = 1, rozmiar = 'duzy', kolor = 'zielony', id } = Astro.props;
+const Tag = poziom === 1 ? 'h1' : 'h2';
+---
+
+<div class="zhp-pas-tytulowy">
+  <Tag class:list={['zhp-band', rozmiar === 'maly' && 'zhp-band--sm', kolor === 'ciemny' && 'zhp-band--strong']} id={id}>
+    <span><slot /></span>
+  </Tag>
+</div>
+
+<style>
+  .zhp-pas-tytulowy {
+    padding-block: var(--zhp-space-12) var(--zhp-space-8);
+  }
+</style>

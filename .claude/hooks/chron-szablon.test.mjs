@@ -18,6 +18,10 @@ test('given a skill file in .claude/, when editing, then the edit is blocked', (
   assert.notEqual(ocen(path.join(projectDir, '.claude', 'skills', 'zhp-wgraj-zmiany', 'SKILL.md')), null);
 });
 
+test('given the content config re-export in src/, when editing, then the edit is blocked', () => {
+  assert.notEqual(ocen(path.join(projectDir, 'src', 'content.config.ts')), null);
+});
+
 test('given a unit-owned file in src/, when editing, then the edit is allowed', () => {
   assert.equal(ocen(path.join(projectDir, 'src', 'pages', 'index.astro')), null);
 });

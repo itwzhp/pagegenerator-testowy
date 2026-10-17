@@ -1,4 +1,10 @@
+/*
+ * Style bazowe: reset, typografia (DESIGN.md §6), układ strony. Plik szablonu (upstream).
+ * Ładowany przez layout core/layouts/Strona.astro.
+ */
 @import './tokens.css';
+@import './fonty.css';
+@import './komponenty.css';
 
 *,
 *::before,
@@ -7,10 +13,9 @@
 }
 
 html {
-  font-family: var(--zhp-font-tekst);
-  color: var(--zhp-kolor-tekstu);
-  background: var(--zhp-kolor-tla);
-  line-height: 1.6;
+  font-synthesis: none; /* nigdy sztucznego pogrubienia ani kursywy */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -18,31 +23,269 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: var(--zhp-font-sans);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--zhp-ink);
+  background: var(--zhp-surface);
 }
 
 main {
   flex: 1;
 }
 
+/* ---------- Nagłówki: tytuły sekcji WERSALIKAMI przez CSS, nagłówki kart zdaniem ---------- */
 h1,
 h2,
-h3 {
-  font-family: var(--zhp-font-naglowki);
-  line-height: 1.2;
+h3,
+h4 {
+  margin: 0 0 var(--zhp-space-4);
+  font-family: var(--zhp-font-display);
+  color: var(--zhp-ink);
+  overflow-wrap: break-word;
+}
+h1,
+.zhp-h1 {
+  font-family: var(--zhp-font-display);
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 46px;
+  text-transform: uppercase;
+}
+h2,
+.zhp-h2 {
+  font-family: var(--zhp-font-display);
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 40px;
+  text-transform: uppercase;
+}
+h3,
+.zhp-h3 {
+  font-family: var(--zhp-font-display);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 26px;
+}
+h4,
+.zhp-h4 {
+  font-family: var(--zhp-font-display);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+}
+.zhp-display {
+  font-family: var(--zhp-font-display);
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 60px;
+  text-transform: uppercase;
+}
+.zhp-lead {
+  font-family: var(--zhp-font-display);
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 30px;
+}
+.zhp-body-sm {
+  font-size: 14px;
+  line-height: 20px;
+}
+.zhp-eyebrow {
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: uppercase;
+  color: var(--zhp-ink-brand);
+}
+.zhp-meta {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zhp-ink-muted);
+}
+.zhp-caption {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--zhp-ink-muted);
+}
+
+@media (max-width: 639px) {
+  .zhp-display {
+    font-size: 40px;
+    line-height: 44px;
+  }
+  h1,
+  .zhp-h1 {
+    font-size: 32px;
+    line-height: 40px;
+  }
+  h2,
+  .zhp-h2 {
+    font-size: 26px;
+    line-height: 32px;
+  }
+}
+
+p,
+ul,
+ol {
+  margin: 0 0 var(--zhp-space-4);
+}
+
+/* Wyróżnienie w tekście = Museo 700 */
+strong,
+b {
+  font-family: var(--zhp-font-display);
+  font-weight: 700;
+}
+
+blockquote {
+  margin: var(--zhp-space-6) 0;
+  padding-left: var(--zhp-space-6);
+  border-left: 4px solid var(--zhp-green);
+  font-size: 20px;
+  line-height: 30px;
+  font-style: italic;
 }
 
 a {
-  color: var(--zhp-kolor-podstawowy-ciemny);
+  color: var(--zhp-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-img {
+:focus-visible {
+  outline: 2px solid var(--zhp-focus-ring);
+  outline-offset: 2px;
+}
+.zhp-on-dark :focus-visible {
+  outline-color: var(--zhp-focus-ring-inverse);
+}
+
+img,
+svg,
+video {
   max-width: 100%;
   height: auto;
 }
 
+hr {
+  border: 0;
+  border-top: var(--zhp-rule-hairline) solid var(--zhp-border);
+  margin: var(--zhp-space-12) 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--zhp-space-6);
+}
+th,
+td {
+  padding: var(--zhp-space-2) var(--zhp-space-3);
+  border-bottom: var(--zhp-rule-hairline) solid var(--zhp-border);
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  font-family: var(--zhp-font-display);
+  font-weight: 700;
+}
+
+/* ---------- Układ ---------- */
+
+/* Wyśrodkowany kontener treści: max 1200px, marginesy 16/32px */
 .zhp-kontener {
   width: 100%;
-  max-width: var(--zhp-szerokosc-tresci);
+  max-width: calc(var(--zhp-content-max) + 2 * var(--zhp-gutter));
   margin-inline: auto;
-  padding-inline: var(--zhp-odstep-3);
+  padding-inline: var(--zhp-gutter);
+}
+
+/* Sekcja strony: oddech pionowy 64px (96px na dużych ekranach) */
+.zhp-sekcja {
+  padding-block: var(--zhp-space-16);
+}
+.zhp-sekcja--tint {
+  background: var(--zhp-surface-tint);
+}
+@media (min-width: 1024px) {
+  .zhp-sekcja {
+    padding-block: var(--zhp-space-24);
+  }
+}
+
+/* Tekst ciągły: max 70 znaków w linii */
+.zhp-tekst {
+  max-width: var(--zhp-text-max);
+}
+
+/* Treść z Markdown (aktualności, podstrony tekstowe) */
+.zhp-proza {
+  max-width: var(--zhp-text-max);
+}
+.zhp-proza h2 {
+  margin-top: var(--zhp-space-12);
+  font-size: 26px;
+  line-height: 32px;
+}
+.zhp-proza h3 {
+  margin-top: var(--zhp-space-8);
+}
+.zhp-proza img {
+  display: block;
+  margin: var(--zhp-space-6) 0;
+}
+.zhp-proza li + li {
+  margin-top: var(--zhp-space-1);
+}
+
+/* Siatka kart: 1 / 2 / 3 kolumny */
+.zhp-siatka {
+  display: grid;
+  gap: var(--zhp-space-8) var(--zhp-space-6);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .zhp-siatka {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .zhp-siatka {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .zhp-siatka--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .zhp-siatka--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Tylko dla czytników ekranu */
+.zhp-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Link „Przejdź do treści” widoczny po fokusie z klawiatury */
+.zhp-skip-link {
+  position: absolute;
+  left: var(--zhp-space-4);
+  top: -100px;
+  z-index: 100;
+  padding: var(--zhp-space-2) var(--zhp-space-4);
+  background: var(--zhp-surface);
+  color: var(--zhp-ink);
+}
+.zhp-skip-link:focus {
+  top: var(--zhp-space-4);
 }

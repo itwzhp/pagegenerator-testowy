@@ -1,0 +1,46 @@
+---
+import Podstrona from '@core/layouts/Podstrona.astro';
+import Srodtytul from '@core/components/Srodtytul.astro';
+import Wyroznienie from '@core/components/Wyroznienie.astro';
+import { site } from '@core/lib/site';
+
+const procent = site.jedenProcent;
+const konta = site.daneFormalne?.konta ?? [];
+---
+
+<Podstrona tytul="Wesprzyj nas" wstep="Twoje wsparcie, nasza siła! Dzięki niemu organizujemy obozy, kupujemy sprzęt i szkolimy kadrę.">
+  {
+    procent && (
+      <section class="zhp-tekst">
+        <Srodtytul>Przekaż 1,5% podatku</Srodtytul>
+        <p>W zeznaniu podatkowym wpisz:</p>
+        <Wyroznienie>
+          KRS {procent.krs}
+          <br />
+          cel szczegółowy: {procent.cel}
+        </Wyroznienie>
+        <p>Cel szczegółowy sprawia, że pieniądze trafią do naszego hufca.</p>
+      </section>
+    )
+  }
+  {
+    konta.length > 0 && (
+      <section class="zhp-tekst">
+        <Srodtytul>Darowizna</Srodtytul>
+        <ul>
+          {konta.map((k) => (
+            <li>
+              {k.nazwa}: <strong>{k.numer}</strong>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</Podstrona>
+
+<style>
+  section + section {
+    margin-top: var(--zhp-space-16);
+  }
+</style>

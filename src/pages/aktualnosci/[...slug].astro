@@ -1,0 +1,9 @@
+---
+import Aktualnosc from '@core/widoki/Aktualnosc.astro';
+import { sciezkiAktualnosci } from '@core/lib/tresci';
+
+export const getStaticPaths = sciezkiAktualnosci;
+const { wpis } = Astro.props;
+---
+
+<Aktualnosc wpis={wpis} />

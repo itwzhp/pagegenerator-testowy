@@ -1,0 +1,128 @@
+---
+// Karta drużyny/gromady: znaki grup, nazwa, zbiórki (gdzie i kiedy: najważniejsze dla rodziców), kadra, kontakt.
+import { render } from 'astro:content';
+import ZnakGrupy from './ZnakGrupy.astro';
+import Foto from './Foto.astro';
+import { hrefTelefonu, osobaZeStopniem } from '../lib/format';
+import type { Jednostka } from '../lib/tresci';
+
+interface Props {
+  jednostka: Jednostka;
+  poziom?: 2 | 3;
+  /** Znaki grup na karcie; zbędne, gdy lista jest już pogrupowana według grup. */
+  pokazGrupy?: boolean;
+}
+
+const { jednostka, poziom = 3, pokazGrupy = true } = Astro.props;
+const d = jednostka.data;
+const { Content } = await render(jednostka);
+const Tag = poziom === 2 ? 'h2' : 'h3';
+const linki = [
+  ['Facebook', d.facebook],
+  ['Instagram', d.instagram],
+  ['Strona', d.www],
+].filter((l): l is [string, string] => Boolean(l[1]));
+---
+
+<article class="zhp-jednostka" id={jednostka.id}>
+  {d.zdjecie && <Foto zdjecie={d.zdjecie} />}
+  {
+    pokazGrupy && (
+      <div class="zhp-jednostka-grupy">
+        {d.grupy.map((g) => (
+          <ZnakGrupy grupa={g} rozmiar="maly" wiek={false} />
+        ))}
+      </div>
+    )
+  }
+  <Tag class="zhp-card-title">{d.nazwa}</Tag>
+  {(d.szczep || d.miejscowosc) && <p class="zhp-meta">{[d.miejscowosc, d.szczep].filter(Boolean).join(' · ')}</p>}
+  <div class="zhp-jednostka-opis"><Content /></div>
+  <dl class="zhp-jednostka-dane">
+    {
+      d.zbiorki && (
+        <>
+          <dt>Zbiórki</dt>
+          <dd>
+            {d.zbiorki.termin}
+            <br />
+            {d.zbiorki.miejsce}
+          </dd>
+        </>
+      )
+    }
+    {
+      d.kadra.map((o) => (
+        <>
+          <dt>{o.funkcja}</dt>
+          <dd>{osobaZeStopniem(o)}</dd>
+        </>
+      ))
+    }
+    {
+      (d.email || d.telefon) && (
+        <>
+          <dt>Kontakt</dt>
+          <dd>
+            {d.email && <a href={`mailto:${d.email}`}>{d.email}</a>}
+            {d.email && d.telefon && <br />}
+            {d.telefon && <a href={hrefTelefonu(d.telefon)}>{d.telefon}</a>}
+          </dd>
+        </>
+      )
+    }
+  </dl>
+  {
+    linki.length > 0 && (
+      <p class="zhp-jednostka-linki">
+        {linki.map(([nazwa, url]) => (
+          <a href={url} rel="noopener">
+            {nazwa}
+          </a>
+        ))}
+      </p>
+    )
+  }
+</article>
+
+<style>
+  .zhp-jednostka {
+    display: flex;
+    flex-direction: column;
+    gap: var(--zhp-space-3);
+    padding-top: var(--zhp-space-4);
+    border-top: var(--zhp-rule-thick) solid var(--zhp-green);
+  }
+  .zhp-jednostka p {
+    margin: 0;
+  }
+  .zhp-jednostka-grupy {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zhp-space-2) var(--zhp-space-4);
+  }
+  .zhp-jednostka-opis :global(p) {
+    font-size: 15px;
+    line-height: 22px;
+  }
+  .zhp-jednostka-dane {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--zhp-space-1) var(--zhp-space-4);
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .zhp-jednostka-dane dt {
+    color: var(--zhp-ink-muted);
+  }
+  .zhp-jednostka-dane dd {
+    margin: 0;
+  }
+  .zhp-jednostka-linki {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zhp-space-4);
+    font-size: 14px;
+  }
+</style>

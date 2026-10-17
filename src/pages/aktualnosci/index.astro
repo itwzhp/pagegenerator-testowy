@@ -1,0 +1,11 @@
+---
+import Podstrona from '@core/layouts/Podstrona.astro';
+import ListaAktualnosci from '@core/components/ListaAktualnosci.astro';
+import { pobierzAktualnosci } from '@core/lib/tresci';
+
+const wpisy = await pobierzAktualnosci();
+---
+
+<Podstrona tytul="Aktualności" wstep="Co słychać w hufcu: relacje z biwaków i obozów, zapowiedzi i ważne informacje.">
+  <ListaAktualnosci wpisy={wpisy} />
+</Podstrona>

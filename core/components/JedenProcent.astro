@@ -1,0 +1,21 @@
+---
+// Pasek kampanii 1,5% (InfoBar): KRS i cel szczegółowy zawsze razem. Bez `jedenProcent` w site.config.ts nic nie renderuje.
+import PasekInfo from './PasekInfo.astro';
+import { site } from '../lib/site';
+
+interface Props {
+  /** Link do podstrony ze szczegółami (np. „/wesprzyj”). */
+  wiecej?: string;
+}
+
+const { wiecej } = Astro.props;
+const dane = site.jedenProcent;
+---
+
+{
+  dane && (
+    <PasekInfo akcja={wiecej ? { etykieta: 'Dowiedz się więcej', href: wiecej } : undefined}>
+      Przekaż 1,5% podatku: KRS <strong>{dane.krs}</strong>, cel szczegółowy: <strong>{dane.cel}</strong>
+    </PasekInfo>
+  )
+}

@@ -1,25 +1,113 @@
 /*
- * Design tokeny identyfikacji wizualnej ZHP.
- * Kod jednostki (src/) używa WYŁĄCZNIE tych zmiennych — bez własnych kolorów i fontów.
- * Wartości są tymczasowe; docelowe kolory i typografia przyjdą z księgi znaku.
+ * Design tokeny ZHP. Plik szablonu (upstream), nie edytuj w repo jednostki.
+ *
+ * Źródło: core/DESIGN.md (Katalog Identyfikacji Wizualnej ZHP, 5. wyd., 2024).
+ * Nazwa tokenu = nazwa z DESIGN.md z prefiksem --zhp-, np. `surface-brand` → --zhp-surface-brand.
+ *
+ * W kodzie używaj najpierw tokenów semantycznych (surface-*, ink-*, link, border-*),
+ * a kolorów palety tylko do kodowania grup, infografik i pojedynczych akcentów.
  */
+
 :root {
-  --zhp-kolor-podstawowy: #4a7a2c;
-  --zhp-kolor-podstawowy-ciemny: #2f5419;
-  --zhp-kolor-tla: #ffffff;
-  --zhp-kolor-tekstu: #1f2421;
-  --zhp-kolor-tekstu-drugorzedny: #5b635e;
-  --zhp-kolor-obramowania: #dde3dc;
+  /* ---------- Paleta podstawowa i harcerska (KIW s. 32–33) ---------- */
+  --zhp-green: #87a428;
+  --zhp-green-light: #afca0b;
+  --zhp-green-dark: #587d18;
+  --zhp-white: #ffffff;
+  --zhp-black: #000000;
+  --zhp-yellow: #f8c409;
+  --zhp-yellow-light: #fbcd44;
+  --zhp-yellow-dark: #f6a11a;
+  --zhp-scout: #5d2f88;
+  --zhp-scout-light: #80539b;
+  --zhp-scout-dark: #3f1457;
+  --zhp-navy: #252e78;
+  --zhp-navy-light: #194093;
+  --zhp-navy-dark: #232740;
+  --zhp-red: #e30613;
+  --zhp-red-light: #e94f2d;
+  --zhp-red-dark: #9b1006;
 
-  --zhp-font-tekst: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --zhp-font-naglowki: var(--zhp-font-tekst);
+  /* ---------- Paleta rozszerzona (KIW s. 34): infografiki, ilustracje, kodowanie grup ---------- */
+  --zhp-orange: #ef7d00;
+  --zhp-orange-light: #f39200;
+  --zhp-orange-dark: #e15c11;
+  --zhp-purple: #8a0e68;
+  --zhp-purple-light: #ac467d;
+  --zhp-purple-dark: #660d51;
+  --zhp-grey: #a6adb3;
+  --zhp-grey-light: #cfd3d7;
+  --zhp-grey-dark: #717d85;
+  --zhp-brown: #a3521f;
+  --zhp-brown-light: #c7833f;
+  --zhp-brown-dark: #603519;
+  --zhp-blue: #26b4e6;
+  --zhp-blue-light: #94d3f1;
+  --zhp-blue-dark: #0083ac;
+  --zhp-pink: #e58795;
+  --zhp-pink-light: #f4a5b5;
+  --zhp-pink-dark: #d36a83;
 
-  --zhp-odstep-1: 0.25rem;
-  --zhp-odstep-2: 0.5rem;
-  --zhp-odstep-3: 1rem;
-  --zhp-odstep-4: 2rem;
-  --zhp-odstep-5: 4rem;
+  /* ---------- Tokeny semantyczne: tych używaj w kodzie ---------- */
+  --zhp-surface: var(--zhp-white);
+  --zhp-surface-tint: #f7f9f0; /* naprzemienne sekcje */
+  --zhp-surface-brand: var(--zhp-green); /* pasy tytułowe; biały tekst tylko od 32px */
+  --zhp-surface-brand-strong: var(--zhp-green-dark); /* zielony pas z białym tekstem w rozmiarze body */
+  --zhp-surface-inverse: var(--zhp-navy-dark); /* stopka, ciemne sekcje */
+  --zhp-ink: var(--zhp-black);
+  --zhp-ink-muted: #5e6970;
+  --zhp-ink-inverse: var(--zhp-white);
+  --zhp-ink-brand: var(--zhp-green-dark);
+  --zhp-link: var(--zhp-green-dark); /* linki zawsze podkreślone */
+  --zhp-border: var(--zhp-grey-light);
+  --zhp-border-strong: var(--zhp-grey-dark);
+  --zhp-focus-ring: var(--zhp-black);
+  --zhp-focus-ring-inverse: var(--zhp-white);
+  --zhp-mark-yes: var(--zhp-green-dark);
+  --zhp-mark-no: var(--zhp-red-dark);
+  --zhp-mark-maybe: var(--zhp-yellow-dark);
 
-  --zhp-szerokosc-tresci: 72rem;
-  --zhp-promien: 0.5rem;
+  /* ---------- Kolory grup metodycznych i członkowskich (tylko do treści dla danej grupy) ---------- */
+  --zhp-group-zuchy: var(--zhp-yellow); /* tekst: czarny */
+  --zhp-group-harcerze: var(--zhp-green-light); /* tekst: czarny */
+  --zhp-group-harcerze-starsi: var(--zhp-navy-light); /* tekst: biały */
+  --zhp-group-wedrownicy: var(--zhp-red); /* tekst: biały */
+  --zhp-group-akademicy: var(--zhp-orange-light); /* tekst: czarny */
+  --zhp-group-starszyzna: var(--zhp-scout); /* tekst: biały */
+  --zhp-group-nieprzetarty-szlak: var(--zhp-yellow-dark); /* tekst: czarny */
+  --zhp-group-instruktorzy: var(--zhp-grey-dark); /* tekst: biały */
+
+  /* ---------- Odstępy (skala 4px) ---------- */
+  --zhp-space-1: 4px;
+  --zhp-space-2: 8px;
+  --zhp-space-3: 12px;
+  --zhp-space-4: 16px;
+  --zhp-space-6: 24px;
+  --zhp-space-8: 32px;
+  --zhp-space-12: 48px;
+  --zhp-space-16: 64px;
+  --zhp-space-24: 96px;
+
+  /* ---------- Kształt i siatka ---------- */
+  --zhp-radius-0: 0; /* sekcje, pasy, zdjęcia, karty */
+  --zhp-radius-sm: 4px; /* tylko przyciski, pola, tagi */
+  --zhp-rule-hairline: 1px;
+  --zhp-rule-thick: 6px;
+  --zhp-dash-width: 40px;
+  --zhp-logo-min-height: 60px;
+  --zhp-header-logo-height: 80px;
+  --zhp-content-max: 1200px;
+  --zhp-text-max: 70ch;
+  /* margines boczny kontenera: 16px na telefonie, 32px od tabletu */
+  --zhp-gutter: var(--zhp-space-4);
+
+  /* ---------- Typografia ---------- */
+  --zhp-font-sans: 'Museo Sans', 'Trebuchet MS', system-ui, sans-serif;
+  --zhp-font-display: 'Museo', 'Museo Sans', 'Trebuchet MS', system-ui, sans-serif;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --zhp-gutter: var(--zhp-space-8);
+  }
 }

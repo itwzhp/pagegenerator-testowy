@@ -1,0 +1,13 @@
+---
+// Śródtytuł z zieloną kreską (DESIGN.md §10 SubHeading). Tekst pisz normalnie, CSS zamienia go na WERSALIKI.
+interface Props {
+  poziom?: 2 | 3 | 4;
+  rozmiar?: 'duzy' | 'maly';
+  id?: string;
+}
+
+const { poziom = 2, rozmiar = 'duzy', id } = Astro.props;
+const Tag = poziom === 2 ? 'h2' : poziom === 3 ? 'h3' : 'h4';
+---
+
+<Tag class:list={['zhp-subheading', rozmiar === 'maly' && 'zhp-subheading--sm']} id={id}><slot /></Tag>

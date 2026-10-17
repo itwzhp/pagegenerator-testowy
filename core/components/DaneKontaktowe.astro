@@ -1,0 +1,88 @@
+---
+// Dane kontaktowe i formalne jednostki z site.config.ts: adres, e-mail, telefon, dyżury, mapa, IOD, NIP/REGON/KRS, konta.
+import Srodtytul from './Srodtytul.astro';
+import { site } from '../lib/site';
+import { hrefTelefonu } from '../lib/format';
+
+interface Props {
+  /** Pokaż dane formalne (NIP, REGON, KRS, konta). */
+  formalne?: boolean;
+}
+
+const { formalne = true } = Astro.props;
+const k = site.kontakt;
+const f = site.daneFormalne;
+---
+
+<div class="zhp-kontakt">
+  <div>
+    <Srodtytul poziom={2} rozmiar="maly">Napisz lub zadzwoń</Srodtytul>
+    <dl class="zhp-kontakt-dane">
+      {k.email && (<><dt>E-mail</dt><dd><a href={`mailto:${k.email}`}>{k.email}</a></dd></>)}
+      {k.telefon && (<><dt>Telefon</dt><dd><a href={hrefTelefonu(k.telefon)}>{k.telefon}</a></dd></>)}
+      {k.adres && (<><dt>Siedziba</dt><dd>{k.adres}{k.mapa && (<><br /><a href={k.mapa} rel="noopener">Zobacz na mapie</a></>)}</dd></>)}
+      {k.dyzury && (<><dt>Dyżury</dt><dd>{k.dyzury}</dd></>)}
+      {k.adresKorespondencyjny && (<><dt>Adres do korespondencji i faktur</dt><dd>{k.adresKorespondencyjny}</dd></>)}
+    </dl>
+    {
+      k.iod && (
+        <p class="zhp-meta">
+          Inspektor ochrony danych:{' '}
+          {k.iod.email && <a href={`mailto:${k.iod.email}`}>{k.iod.email}</a>}
+          {k.iod.email && k.iod.telefon && ', '}
+          {k.iod.telefon && <a href={hrefTelefonu(k.iod.telefon)}>{k.iod.telefon}</a>}
+        </p>
+      )
+    }
+  </div>
+  {
+    formalne && f && (
+      <div>
+        <Srodtytul poziom={2} rozmiar="maly">Dane formalne</Srodtytul>
+        <dl class="zhp-kontakt-dane">
+          {f.nip && (<><dt>NIP</dt><dd>{f.nip}</dd></>)}
+          {f.regon && (<><dt>REGON</dt><dd>{f.regon}</dd></>)}
+          {f.krs && (<><dt>KRS</dt><dd>{f.krs}</dd></>)}
+          {f.konta.map((konto) => (<><dt>{konto.nazwa}</dt><dd class="zhp-kontakt-konto">{konto.numer}</dd></>))}
+        </dl>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .zhp-kontakt {
+    display: grid;
+    gap: var(--zhp-space-12);
+  }
+  @media (min-width: 1024px) {
+    .zhp-kontakt {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .zhp-kontakt-dane {
+    display: grid;
+    grid-template-columns: minmax(7rem, max-content) 1fr;
+    gap: var(--zhp-space-3) var(--zhp-space-6);
+    margin: 0 0 var(--zhp-space-6);
+  }
+  .zhp-kontakt-dane dt {
+    color: var(--zhp-ink-muted);
+  }
+  .zhp-kontakt-dane dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .zhp-kontakt-konto {
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 639px) {
+    .zhp-kontakt-dane {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .zhp-kontakt-dane dd {
+      margin-bottom: var(--zhp-space-3);
+    }
+  }
+</style>

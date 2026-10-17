@@ -1,0 +1,11 @@
+---
+import Podstrona from '@core/layouts/Podstrona.astro';
+import Zespol from '@core/components/Zespol.astro';
+import { pobierzZespoly } from '@core/lib/tresci';
+
+const zespoly = await pobierzZespoly();
+---
+
+<Podstrona tytul="Komenda i zespoły" wstep="Instruktorki i instruktorzy, którzy prowadzą hufiec. Wszyscy działamy jako wolontariusze.">
+  {zespoly.map((z) => <Zespol zespol={z} />)}
+</Podstrona>

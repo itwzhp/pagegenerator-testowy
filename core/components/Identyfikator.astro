@@ -1,0 +1,41 @@
+---
+// Identyfikator w nagłówku/stopce (DESIGN.md §4). Gotowy plik jednostki z site.config.ts albo identyfikator ZHP.
+// Nigdy nie składaj identyfikatora samodzielnie i nie wpisuj nazwy jednostki w znak.
+import zielony from '../assets/logo/zhp-identyfikator-green.svg';
+import bialy from '../assets/logo/zhp-identyfikator-white.svg';
+import { site } from '../lib/site';
+
+interface Props {
+  /** `kolor` na białym tle, `bialy` na kolorze, zdjęciu i w ciemnej stopce. */
+  wariant?: 'kolor' | 'bialy';
+  /** Wysokość obrazka w px; min. 76 (widoczny znak ≥ 60px). */
+  wysokosc?: number;
+}
+
+const { wariant = 'kolor', wysokosc = 80 } = Astro.props;
+const h = Math.max(76, wysokosc);
+const plikJednostki = site.identyfikator?.[wariant];
+const zhp = wariant === 'kolor' ? zielony : bialy;
+---
+
+{
+  plikJednostki ? (
+    <img class="zhp-identyfikator" src={plikJednostki} alt={site.nazwa} height={h} />
+  ) : (
+    <img
+      class="zhp-identyfikator"
+      src={zhp.src}
+      width={Math.round((zhp.width / zhp.height) * h)}
+      height={h}
+      alt="Związek Harcerstwa Polskiego"
+    />
+  )
+}
+
+<style>
+  .zhp-identyfikator {
+    display: block;
+    width: auto;
+    max-width: none;
+  }
+</style>

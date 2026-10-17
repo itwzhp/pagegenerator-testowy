@@ -1,16 +1,28 @@
 ---
+// Layout każdej podstrony: <head>, nagłówek, treść, pasek dofinansowania i stopka.
 import '../styles/base.css';
 import Naglowek from '../components/Naglowek.astro';
 import Stopka from '../components/Stopka.astro';
+import Dofinansowanie from '../components/Dofinansowanie.astro';
 import { site } from '../lib/site';
 
 interface Props {
+  /** Tytuł podstrony; w karcie przeglądarki: „Tytuł · Nazwa jednostki”. Pomiń na stronie głównej. */
   tytul?: string;
+  /** Meta description (domyślnie opis jednostki). Max ok. 160 znaków. */
   opis?: string;
+  /** Zdjęcie do podglądu w mediach społecznościowych (ścieżka w public/). */
+  obraz?: string;
+  /** `article` dla aktualności. */
+  typ?: 'website' | 'article';
+  /** Pokaż pasek dofinansowania NIW (tylko na stronach o działaniach dofinansowanych). */
+  dofinansowanie?: boolean;
 }
 
-const { tytul, opis = site.opis } = Astro.props;
+const { tytul, opis = site.opis, obraz, typ = 'website', dofinansowanie = false } = Astro.props;
 const pelnyTytul = tytul ? `${tytul} · ${site.nazwa}` : site.nazwa;
+const kanoniczny = site.adres ? new URL(Astro.url.pathname, site.adres).href : undefined;
+const obrazUrl = obraz && site.adres ? new URL(obraz, site.adres).href : undefined;
 ---
 
 <!doctype html>
@@ -20,13 +32,24 @@ const pelnyTytul = tytul ? `${tytul} · ${site.nazwa}` : site.nazwa;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pelnyTytul}</title>
     <meta name="description" content={opis} />
+    {kanoniczny && <link rel="canonical" href={kanoniczny} />}
+    <meta property="og:type" content={typ} />
+    <meta property="og:title" content={tytul ?? site.nazwa} />
+    <meta property="og:description" content={opis} />
+    <meta property="og:site_name" content={site.nazwa} />
+    <meta property="og:locale" content="pl_PL" />
+    {kanoniczny && <meta property="og:url" content={kanoniczny} />}
+    {obrazUrl && <meta property="og:image" content={obrazUrl} />}
+    <meta name="theme-color" content="#587d18" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+    <a class="zhp-skip-link" href="#tresc">Przejdź do treści</a>
     <Naglowek />
-    <main>
+    <main id="tresc">
       <slot />
     </main>
+    {dofinansowanie && <Dofinansowanie />}
     <Stopka />
   </body>
 </html>

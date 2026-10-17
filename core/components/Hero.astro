@@ -1,0 +1,95 @@
+---
+// Hero strony głównej (DESIGN.md §11): kim jesteśmy, gdzie, dla kogo + CTA + szybkie linki-pytania.
+// Tytuł WERSALIKAMI (styl display, raz na stronę). Zdjęcie 16:9, prawdziwe, z autorem; bez zdjęcia sam tekst.
+import Foto from './Foto.astro';
+import Przycisk from './Przycisk.astro';
+import type { OdnosnikMenu, Zdjecie } from '../lib/schematy';
+import { bezSierotek } from '../lib/format';
+
+interface Props {
+  tytul: string;
+  /** Nadtytuł, np. „Hufiec ZHP Przykładowo”. */
+  nadtytul?: string;
+  /** Wstęp: 1–2 zdania. */
+  wstep?: string;
+  /** Pierwszy = główny, kolejne = drugorzędne. Max 2. */
+  przyciski?: OdnosnikMenu[];
+  /** Linki-pytania jak na zhp.pl: „Ile to kosztuje?”, „Gdzie są zbiórki?”. Max 4. */
+  szybkieLinki?: OdnosnikMenu[];
+  zdjecie?: Zdjecie;
+}
+
+const { tytul, nadtytul, wstep, przyciski = [], szybkieLinki = [], zdjecie } = Astro.props;
+---
+
+<section class:list={['zhp-hero', zdjecie && 'zhp-hero--zdjecie']}>
+  <div class="zhp-kontener zhp-hero-siatka">
+    <div class="zhp-hero-tekst">
+      {nadtytul && <p class="zhp-eyebrow">{nadtytul}</p>}
+      <h1 class="zhp-display">{bezSierotek(tytul)}</h1>
+      {wstep && <p class="zhp-lead">{bezSierotek(wstep)}</p>}
+      {
+        przyciski.length > 0 && (
+          <div class="zhp-przyciski">
+            {przyciski.slice(0, 2).map((p, i) => (
+              <Przycisk href={p.href} wariant={i === 0 ? 'glowny' : 'drugorzedny'}>
+                {p.etykieta}
+              </Przycisk>
+            ))}
+          </div>
+        )
+      }
+      {
+        szybkieLinki.length > 0 && (
+          <ul class="zhp-hero-linki">
+            {szybkieLinki.slice(0, 4).map((l) => (
+              <li>
+                <a href={l.href}>{l.etykieta}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+    {zdjecie && <Foto zdjecie={zdjecie} kadr="16x9" priorytet />}
+  </div>
+</section>
+
+<style>
+  .zhp-hero {
+    padding-block: var(--zhp-space-12) var(--zhp-space-16);
+  }
+  .zhp-hero-siatka {
+    display: grid;
+    gap: var(--zhp-space-8);
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .zhp-hero--zdjecie .zhp-hero-siatka {
+      grid-template-columns: 5fr 6fr;
+      gap: var(--zhp-space-12);
+    }
+  }
+  .zhp-hero-tekst {
+    max-width: 44rem;
+  }
+  .zhp-hero h1 {
+    margin-bottom: var(--zhp-space-6);
+  }
+  .zhp-hero .zhp-lead {
+    margin-bottom: var(--zhp-space-8);
+  }
+  .zhp-hero-linki {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zhp-space-2) var(--zhp-space-6);
+    margin: var(--zhp-space-8) 0 0;
+    padding: var(--zhp-space-4) 0 0;
+    border-top: var(--zhp-rule-thick) solid var(--zhp-green);
+    list-style: none;
+  }
+  .zhp-hero-linki a {
+    font-family: var(--zhp-font-display);
+    font-weight: 700;
+  }
+</style>

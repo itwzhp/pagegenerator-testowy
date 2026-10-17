@@ -11,7 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const CHRONIONE_KATALOGI = ['core/', '.claude/', '.github/'];
-const CHRONIONE_PLIKI = ['CLAUDE.md', 'astro.config.mjs', 'wrangler.jsonc', 'tsconfig.json', 'zhp-template.json'];
+const CHRONIONE_PLIKI = ['CLAUDE.md', 'astro.config.mjs', 'wrangler.jsonc', 'tsconfig.json', 'zhp-template.json', 'src/content.config.ts'];
 const WYJATKI = ['.claude/settings.local.json'];
 
 /**

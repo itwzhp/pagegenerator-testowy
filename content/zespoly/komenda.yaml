@@ -1,0 +1,15 @@
+# Skład komendy: zgoda na publikację imion, nazwisk, stopni i funkcji (JEDNOSTKA.md).
+nazwa: Komenda hufca
+kolejnosc: 1
+kadencja: 2023–2027
+email: test@zhp.pl
+czlonkowie:
+  - stopien: phm.
+    imie: Jan Kowalski
+    funkcja: komendant hufca
+  - stopien: pwd.
+    imie: Anna Nowak
+    funkcja: skarbniczka hufca
+  - stopien: pwd.
+    imie: Tomasz Nowak
+    funkcja: członek komendy

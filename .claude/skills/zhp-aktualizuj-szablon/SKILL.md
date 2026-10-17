@@ -37,7 +37,7 @@ Lista plików w konflikcie: `git diff --name-only --diff-filter=U`. Rozstrzygaj 
 
 | Pliki | Właściciel | Rozstrzygnięcie |
 |---|---|---|
-| `core/`, `.claude/`, `.github/`, `CLAUDE.md`, `astro.config.mjs`, `wrangler.jsonc`, `tsconfig.json`, `zhp-template.json` | szablon | zawsze wersja z szablonu: `git checkout --theirs -- <plik>` |
+| `core/`, `.claude/`, `.github/`, `CLAUDE.md`, `astro.config.mjs`, `wrangler.jsonc`, `tsconfig.json`, `zhp-template.json`, `src/content.config.ts` | szablon | zawsze wersja z szablonu: `git checkout --theirs -- <plik>` |
 | `package-lock.json` | wspólny | `git checkout --theirs -- package-lock.json`, potem `npm install` (odtworzy zależności jednostki) |
 | `package.json` | wspólny | wersje i skrypty z szablonu + dodatkowe zależności jednostki zachowane — połącz ręcznie |
 | `site.config.ts`, `src/`, `content/`, `public/`, `JEDNOSTKA.md` | jednostka | zachowaj treść jednostki (`--ours`), ale dostosuj ją do zmian szablonu (np. nowe wymagane pole w schemacie) |

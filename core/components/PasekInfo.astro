@@ -1,0 +1,15 @@
+---
+// Pasek informacyjny (DESIGN.md §10 InfoBar): jedno zdanie + jedna akcja, np. 1,5%, rekrutacja, zapisy.
+import Przycisk from './Przycisk.astro';
+
+interface Props {
+  akcja?: { etykieta: string; href: string };
+}
+
+const { akcja } = Astro.props;
+---
+
+<div class="zhp-infobar zhp-on-dark">
+  <p><slot /></p>
+  {akcja && <Przycisk href={akcja.href} wariant="odwrocony">{akcja.etykieta}</Przycisk>}
+</div>

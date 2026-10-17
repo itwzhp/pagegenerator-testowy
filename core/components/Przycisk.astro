@@ -1,0 +1,33 @@
+---
+// Przycisk CTA (DESIGN.md §10 Button): czasownik na początku, max 3–4 słowa, zdaniem (nie WERSALIKAMI).
+// Jeden przycisk główny na widok; kolejne jako `drugorzedny`.
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'a'>, 'type'> {
+  href?: string;
+  /** `odwrocony` (biały) na zielonym polu lub zdjęciu. */
+  wariant?: 'glowny' | 'drugorzedny' | 'odwrocony';
+  type?: 'button' | 'submit';
+}
+
+const { href, wariant = 'glowny', type = 'button', class: klasa, ...reszta } = Astro.props;
+const klasy = [
+  'zhp-btn',
+  wariant === 'drugorzedny' && 'zhp-btn--secondary',
+  wariant === 'odwrocony' && 'zhp-btn--inverse',
+  klasa,
+];
+const zewnetrzny = href?.startsWith('http');
+---
+
+{
+  href ? (
+    <a class:list={klasy} href={href} rel={zewnetrzny ? 'noopener' : undefined} {...reszta}>
+      <slot />
+    </a>
+  ) : (
+    <button class:list={klasy} type={type}>
+      <slot />
+    </button>
+  )
+}

@@ -1,0 +1,29 @@
+---
+// Zdjęcie z podpisem autora (DESIGN.md §8, §10 Figure). Jedyny sposób wstawiania zdjęć na stronę:
+// dzięki temu zdjęcia można później przenieść do zewnętrznego magazynu bez zmian w treściach jednostek.
+// Pliki w public/ (max 2560 px, WebP, bez EXIF, < 1 MB). Tylko prawdziwe zdjęcia ZHP, za zgodą osób na nich.
+import type { Zdjecie } from '../lib/schematy';
+
+interface Props {
+  zdjecie: Zdjecie;
+  /** 3:2 dla kart i artykułów, 16:9 dla hero, `oryginal` bez kadrowania. */
+  kadr?: '3x2' | '16x9' | 'oryginal';
+  /** Zdjęcie widoczne od razu po wejściu (hero): ładuj priorytetowo. */
+  priorytet?: boolean;
+  class?: string;
+}
+
+const { zdjecie, kadr = '3x2', priorytet = false, class: klasa } = Astro.props;
+const podpis = zdjecie.autor.startsWith('fot.') ? zdjecie.autor : `fot. ${zdjecie.autor}`;
+---
+
+<figure class:list={['zhp-figure', kadr === '16x9' && 'zhp-figure--16x9', kadr === 'oryginal' && 'zhp-figure--oryginal', klasa]}>
+  <img
+    src={zdjecie.src}
+    alt={zdjecie.alt}
+    loading={priorytet ? 'eager' : 'lazy'}
+    fetchpriority={priorytet ? 'high' : undefined}
+    decoding="async"
+  />
+  <figcaption>{podpis}</figcaption>
+</figure>
