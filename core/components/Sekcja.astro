@@ -1,0 +1,21 @@
+---
+// Sekcja strony: oddech pionowy + wyśrodkowany kontener + opcjonalny śródtytuł.
+// `tlo="tint"` dla naprzemiennych sekcji (nie stawiaj dwóch takich sekcji obok siebie).
+import Srodtytul from './Srodtytul.astro';
+
+interface Props {
+  tytul?: string;
+  tlo?: 'biale' | 'tint';
+  id?: string;
+  class?: string;
+}
+
+const { tytul, tlo = 'biale', id, class: klasa } = Astro.props;
+---
+
+<section class:list={['zhp-sekcja', tlo === 'tint' && 'zhp-sekcja--tint', klasa]} id={id}>
+  <div class="zhp-kontener">
+    {tytul && <Srodtytul>{tytul}</Srodtytul>}
+    <slot />
+  </div>
+</section>

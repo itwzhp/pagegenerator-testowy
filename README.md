@@ -9,12 +9,13 @@ Szablon statycznej strony dla hufców, szczepów i innych jednostek ZHP. Stronę
 
 1. Jednostka dostaje własne repo założone z tego szablonu.
 2. Uruchamia w nim Claude Code, lokalnie albo w chmurze.
-3. `/zhp-zbuduj-strone` + wklejone materiały (adres obecnej strony, kontakty) → agent dopytuje o braki
-   i buduje stronę.
+3. `/zhp-zbuduj-strone` + wklejone materiały (adres obecnej strony, kontakty) → agent proponuje strukturę
+   na bazie modelowej (`.claude/skills/zhp-zbuduj-strone/struktura.md`), dopytuje o braki i buduje stronę.
 4. `/zhp-generuj-podglad` → adres testowy na Cloudflare.
 5. Poprawki w rozmowie albo ręcznie → kolejne podglądy.
 6. `/zhp-wgraj-zmiany` → merge do `main` i publikacja.
 
+Bieżące prowadzenie: `/zhp-napisz-aktualnosc`, `/zhp-dodaj-wydarzenie`.
 Później: `/zhp-aktualizuj-szablon` zaciąga nową wersję szablonu (wygląd, komponenty, skille).
 
 ## Zakładanie repo jednostki
@@ -60,10 +61,12 @@ Bez tokenu workflow tylko buduje i sprawdza stronę (tak działa samo repo szabl
 ## Struktura
 
 ```
-core/                 szablon: layouty, komponenty, tokeny, schematy (nie edytować w jednostce)
+core/                 szablon: layouty, komponenty, tokeny, fonty, logotypy, schematy (nie edytować w jednostce)
+  DESIGN.md           zasady marki ZHP (KIW): ton, kolory, typografia, logo, zdjęcia
+  KOMPONENTY.md       katalog komponentów i kolekcji treści dla agenta
 src/pages/            podstrony jednostki
 src/components/       własne komponenty jednostki
-content/              treści (Markdown/JSON)
+content/              treści: aktualnosci/, wydarzenia/, jednostki/, zespoly/
 public/               pliki statyczne
 site.config.ts        dane jednostki
 JEDNOSTKA.md          notatki jednostki dla agenta

@@ -1,0 +1,47 @@
+---
+// „W liczbach”: kilka wartości z site.config.ts (`liczby`) zawsze z datą stanu. Nie wymyślaj liczb.
+import { site } from '../lib/site';
+import { formatujDate } from '../lib/format';
+
+const dane = site.liczby;
+---
+
+{
+  dane && (
+    <div class="zhp-liczby">
+      <ul>
+        {dane.pozycje.map((p) => (
+          <li>
+            <span class="zhp-liczby-wartosc">{p.wartosc}</span>
+            <span>{p.etykieta}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="zhp-caption">Stan na {formatujDate(dane.stanNa)}</p>
+    </div>
+  )
+}
+
+<style>
+  .zhp-liczby ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--zhp-space-6);
+    margin: 0 0 var(--zhp-space-3);
+    padding: var(--zhp-space-6) 0;
+    border-top: var(--zhp-rule-thick) solid var(--zhp-green);
+    border-bottom: var(--zhp-rule-thick) solid var(--zhp-green);
+    list-style: none;
+  }
+  .zhp-liczby li {
+    display: flex;
+    flex-direction: column;
+  }
+  .zhp-liczby-wartosc {
+    font-family: var(--zhp-font-display);
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 46px;
+    color: var(--zhp-ink-brand);
+  }
+</style>

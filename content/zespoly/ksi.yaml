@@ -1,0 +1,16 @@
+# Dane wymyślone na potrzeby testów (JEDNOSTKA.md).
+nazwa: Komisja Stopni Instruktorskich
+opis: Prowadzi próby na stopnie przewodnika i podharcmistrza oraz wspiera opiekunów prób.
+kolejnosc: 3
+kadencja: 2023–2027
+email: ksi@testowy.zhp.pl
+czlonkowie:
+  - stopien: hm.
+    imie: Andrzej Kaczmarek
+    funkcja: przewodniczący
+  - stopien: phm.
+    imie: Monika Grabowska
+    funkcja: członkini
+  - stopien: phm.
+    imie: Paweł Jankowski
+    funkcja: członek

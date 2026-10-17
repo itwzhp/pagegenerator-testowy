@@ -1,0 +1,43 @@
+---
+// Pasek dofinansowania NIW-CRSO / ROHiS (DESIGN.md §12): oficjalny plik logotypów + niezmienna formułka.
+// Pokazuj tylko na stronach o działaniach dofinansowanych (layout: <Strona dofinansowanie>).
+// Bez pliku w site.config.ts (`dofinansowanie`) komponent nic nie renderuje.
+import { site } from '../lib/site';
+
+const FORMULKA = {
+  wspolfinansowano:
+    'Współfinansowano ze środków Narodowego Instytutu Wolności – Centrum Rozwoju Społeczeństwa Obywatelskiego w ramach Rządowego Programu Wsparcia Rozwoju Organizacji Harcerskich i Skautowych na lata 2018–2030',
+  sfinansowano:
+    'Sfinansowano ze środków Narodowego Instytutu Wolności – Centrum Rozwoju Społeczeństwa Obywatelskiego w ramach Rządowego Programu Wsparcia Rozwoju Organizacji Harcerskich i Skautowych na lata 2018–2030',
+} as const;
+
+const dane = site.dofinansowanie;
+---
+
+{
+  dane && (
+    <aside class="zhp-dofinansowanie" aria-label="Dofinansowanie">
+      <div class="zhp-kontener">
+        <img src={dane.pasek} alt={dane.alt} loading="lazy" />
+        <p class="zhp-caption">{FORMULKA[dane.rodzaj]}</p>
+      </div>
+    </aside>
+  )
+}
+
+<style>
+  .zhp-dofinansowanie {
+    padding-block: var(--zhp-space-8);
+    border-top: var(--zhp-rule-hairline) solid var(--zhp-border);
+    background: var(--zhp-surface);
+  }
+  .zhp-dofinansowanie img {
+    display: block;
+    max-height: 96px;
+    width: auto;
+  }
+  .zhp-dofinansowanie p {
+    margin: var(--zhp-space-3) 0 0;
+    max-width: var(--zhp-text-max);
+  }
+</style>

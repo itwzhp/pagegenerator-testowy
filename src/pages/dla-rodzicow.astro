@@ -1,0 +1,72 @@
+---
+// Dla rodziców: najważniejsza podstrona rekrutacyjna. Konkretnie: jak zapisać, ile kosztuje, bezpieczeństwo, mundur.
+// Kwoty i zasady tylko od jednostki; bez nich zostaw widoczny placeholder w nawiasach kwadratowych.
+import Podstrona from '@core/layouts/Podstrona.astro';
+import Srodtytul from '@core/components/Srodtytul.astro';
+import GrupyWiekowe from '@core/components/GrupyWiekowe.astro';
+import ListaZnakow from '@core/components/ListaZnakow.astro';
+import Przycisk from '@core/components/Przycisk.astro';
+---
+
+<Podstrona
+  tytul="Dla rodziców"
+  wstep="Chcesz zapisać dziecko do harcerstwa? Wyjaśniamy, jak zacząć, ile to kosztuje i jak dbamy o bezpieczeństwo."
+>
+  <section id="zapisy" class="zhp-blok">
+    <Srodtytul>Jak zapisać dziecko</Srodtytul>
+    <ol class="zhp-tekst">
+      <li>Wybierz drużynę lub gromadę dla wieku dziecka na stronie <a href="/jednostki">Drużyny i gromady</a>.</li>
+      <li>Skontaktuj się z drużynową lub drużynowym i przyjdź na pierwszą zbiórkę.</li>
+      <li>Po kilku zbiórkach wypełnij deklarację członkowską i zgodę na przetwarzanie danych (dostaniesz je od kadry).</li>
+      <li>Opłać składkę członkowską. Od tej chwili dziecko jest pełnoprawnym członkiem ZHP.</li>
+    </ol>
+    <Przycisk href="/jednostki">Znajdź drużynę</Przycisk>
+  </section>
+
+  <section class="zhp-blok">
+    <Srodtytul>Grupy wiekowe</Srodtytul>
+    <GrupyWiekowe />
+  </section>
+
+  <section id="koszty" class="zhp-blok zhp-tekst">
+    <Srodtytul>Ile to kosztuje</Srodtytul>
+    <p>
+      Składka członkowska to <strong>60 zł za półrocze</strong>. Z tej kwoty opłacamy ubezpieczenie NNW, składkę na
+      rzecz Związku i działalność drużyny (materiały, sprzęt). Rodzeństwo płaci połowę.
+    </p>
+    <p>
+      Biwak kosztuje zwykle 80–150 zł, a dwutygodniowy obóz letni około 1800 zł. Aktualne kwoty podajemy przy
+      wydarzeniach w <a href="/wydarzenia">kalendarzu</a>. Jeśli koszt jest barierą, napisz do nas: pomagamy.
+    </p>
+  </section>
+
+  <section class="zhp-blok zhp-tekst">
+    <Srodtytul>Bezpieczeństwo</Srodtytul>
+    <p>
+      Kadra ZHP to przeszkoleni instruktorzy-wolontariusze. Wspieramy rodziców w wychowaniu – Twoje dziecko jest u nas
+      bezpieczne.
+    </p>
+    <p>
+      W hufcu obowiązują Standardy Ochrony Małoletnich ZHP. Każda osoba w kadrze ma zaświadczenie o niekaralności,
+      a kadra obozów ma kwalifikacje wychowawców i kierowników wypoczynku. Wszyscy członkowie są ubezpieczeni od NNW.
+    </p>
+  </section>
+
+  <section class="zhp-blok zhp-tekst">
+    <Srodtytul>Na pierwszą zbiórkę</Srodtytul>
+    <ListaZnakow
+      pozycje={['wygodny strój dostosowany do pogody,', 'coś do picia,', 'dobry humor i ciekawość.']}
+      tytul="Wystarczy:"
+    />
+    <p>
+      Mundur nie jest potrzebny od razu. Zwykle kupuje się go po pierwszych miesiącach, w sklepie harcerskim lub
+      przez internet. Drużynowa albo drużynowy podpowie, co jest potrzebne.
+    </p>
+  </section>
+</Podstrona>
+
+<style>
+  .zhp-blok + .zhp-blok {
+    margin-top: var(--zhp-space-16);
+  }
+</style>

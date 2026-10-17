@@ -1,0 +1,352 @@
+/*
+ * Komponenty ZHP: wersja CSS z design systemu (DESIGN.md §10), klasy z prefiksem zhp-.
+ * Plik szablonu (upstream). Komponenty Astro w core/components/ generują ten markup;
+ * w repo jednostki używaj komponentów Astro, klasy stosuj ręcznie tylko gdy komponent nie pasuje.
+ */
+
+/* ---------- Przycisk (Button) ---------- */
+.zhp-btn,
+a.zhp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--zhp-space-2);
+  min-height: 44px;
+  padding: var(--zhp-space-3) var(--zhp-space-6);
+  font-family: var(--zhp-font-sans);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  border: 2px solid var(--zhp-green-dark);
+  border-radius: var(--zhp-radius-sm);
+  background: var(--zhp-green-dark);
+  color: var(--zhp-ink-inverse);
+  text-decoration: none;
+  cursor: pointer;
+}
+.zhp-btn:hover {
+  box-shadow: inset 0 -4px 0 var(--zhp-green-light);
+}
+.zhp-btn--secondary,
+a.zhp-btn--secondary {
+  background: transparent;
+  color: var(--zhp-green-dark);
+}
+.zhp-btn--secondary:hover {
+  box-shadow: inset 0 -4px 0 var(--zhp-green);
+}
+.zhp-btn--inverse,
+a.zhp-btn--inverse {
+  background: var(--zhp-white);
+  border-color: var(--zhp-white);
+  color: var(--zhp-ink);
+}
+.zhp-btn--inverse:hover {
+  box-shadow: inset 0 -4px 0 var(--zhp-green);
+}
+.zhp-btn[disabled],
+.zhp-btn[aria-disabled='true'] {
+  background: var(--zhp-grey-light);
+  border-color: var(--zhp-grey-light);
+  color: var(--zhp-ink-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.zhp-przyciski {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--zhp-space-3) var(--zhp-space-4);
+}
+
+/* ---------- Pas tytułowy (SectionBand): zielony pas od lewej krawędzi ekranu ---------- */
+.zhp-band {
+  /* wcięcie tekstu = lewa krawędź kontenera treści */
+  --band-inset: max(var(--zhp-gutter), calc((100vw - var(--zhp-content-max)) / 2));
+  margin: 0;
+  padding: 0;
+  font-family: var(--zhp-font-display);
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 68px;
+  text-transform: uppercase;
+  color: var(--zhp-white);
+}
+.zhp-band > span {
+  background: var(--zhp-surface-brand);
+  padding: 12px 48px 12px var(--band-inset);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.zhp-band--strong > span {
+  background: var(--zhp-surface-brand-strong);
+}
+.zhp-band--sm {
+  font-size: 32px;
+  line-height: 55px;
+}
+.zhp-band--sm > span {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+@media (max-width: 639px) {
+  .zhp-band {
+    font-size: 32px;
+    line-height: 55px;
+  }
+  .zhp-band > span {
+    padding-right: 24px;
+  }
+}
+
+/* ---------- Śródtytuł (SubHeading): zielona kreska + WERSALIKI ---------- */
+.zhp-subheading {
+  display: flex;
+  align-items: center;
+  gap: var(--zhp-space-4);
+  margin: 0 0 var(--zhp-space-8);
+  font-family: var(--zhp-font-display);
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 40px;
+  text-transform: uppercase;
+  color: var(--zhp-ink-brand);
+}
+.zhp-subheading::before {
+  content: '';
+  flex: 0 0 var(--zhp-dash-width);
+  height: 4px;
+  background: var(--zhp-green);
+  margin-left: calc(-1 * var(--dash-bleed, 0px));
+}
+.zhp-subheading--sm {
+  margin-bottom: var(--zhp-space-4);
+  font-size: 18px;
+  line-height: 24px;
+}
+.zhp-subheading--sm::before {
+  flex-basis: 24px;
+  height: 3px;
+}
+@media (max-width: 639px) {
+  .zhp-subheading:not(.zhp-subheading--sm) {
+    font-size: 26px;
+    line-height: 32px;
+  }
+}
+
+/* ---------- Wyróżnienie (Highlight): zdanie między grubymi zielonymi liniami ---------- */
+.zhp-highlight {
+  margin: var(--zhp-space-12) 0;
+  padding: var(--zhp-space-6) var(--zhp-space-8);
+  border-top: var(--zhp-rule-thick) solid var(--zhp-green);
+  border-bottom: var(--zhp-rule-thick) solid var(--zhp-green);
+  text-align: center;
+  font-family: var(--zhp-font-display);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 30px;
+  color: var(--zhp-ink-brand);
+}
+.zhp-highlight p {
+  margin: 0 auto;
+  max-width: 60ch;
+}
+
+/* ---------- Lista ✓ / × / → (Checklist) ---------- */
+.zhp-checklist {
+  list-style: none;
+  margin: 0 0 var(--zhp-space-6);
+  padding: 0;
+  display: grid;
+  gap: var(--zhp-space-2);
+}
+.zhp-checklist li {
+  position: relative;
+  padding-left: 32px;
+}
+.zhp-checklist li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  background: var(--zhp-mark-yes);
+  -webkit-mask: var(--zhp-ikona-yes) center / contain no-repeat;
+  mask: var(--zhp-ikona-yes) center / contain no-repeat;
+}
+.zhp-checklist--no li::before,
+.zhp-checklist li[data-mark='no']::before {
+  background: var(--zhp-mark-no);
+  -webkit-mask-image: var(--zhp-ikona-no);
+  mask-image: var(--zhp-ikona-no);
+}
+.zhp-checklist--maybe li::before,
+.zhp-checklist li[data-mark='maybe']::before {
+  background: var(--zhp-mark-maybe);
+  -webkit-mask-image: var(--zhp-ikona-maybe);
+  mask-image: var(--zhp-ikona-maybe);
+}
+.zhp-checklist-title {
+  margin: 0 0 var(--zhp-space-3);
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: uppercase;
+  color: var(--zhp-ink-brand);
+}
+.zhp-checklist-title--no {
+  color: var(--zhp-mark-no);
+}
+:root {
+  --zhp-ikona-yes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M3 10.5l4.5 4.5L17 5' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --zhp-ikona-no: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 5l10 10M15 5L5 15' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  --zhp-ikona-maybe: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M3 10h13M11 5l5 5-5 5' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* ---------- Zdjęcie z podpisem autora (Figure) ---------- */
+.zhp-figure {
+  margin: 0;
+}
+.zhp-figure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--zhp-radius-0);
+  background: var(--zhp-surface-tint);
+}
+.zhp-figure--16x9 img {
+  aspect-ratio: 16 / 9;
+}
+.zhp-figure--oryginal img {
+  aspect-ratio: auto;
+}
+.zhp-figure figcaption {
+  margin-top: var(--zhp-space-2);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--zhp-ink-muted);
+}
+
+/* ---------- Karta wpisu (NewsCard) ---------- */
+.zhp-card,
+a.zhp-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zhp-space-3);
+  color: var(--zhp-ink);
+  text-decoration: none;
+}
+.zhp-card-media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background: var(--zhp-surface-tint);
+}
+/* Karta bez zdjęcia: blok koloru z palety zamiast fałszywego zdjęcia */
+.zhp-card-media--brak {
+  background: var(--zhp-surface-tint);
+  border-top: var(--zhp-rule-thick) solid var(--zhp-green);
+}
+.zhp-card-eyebrow {
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: uppercase;
+  color: var(--zhp-ink-brand);
+}
+.zhp-card-title {
+  margin: 0;
+  font-family: var(--zhp-font-display);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 26px;
+  color: var(--zhp-ink);
+  text-transform: none;
+}
+a.zhp-card:hover .zhp-card-title {
+  text-decoration: underline;
+  text-decoration-color: var(--zhp-green);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+.zhp-card-excerpt {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+.zhp-card-meta {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zhp-ink-muted);
+}
+
+/* ---------- Znak grupy (GroupBadge) ---------- */
+.zhp-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zhp-space-3);
+}
+.zhp-group img {
+  width: 48px;
+  height: 48px;
+  flex: none;
+}
+.zhp-group--sm img {
+  width: 32px;
+  height: 32px;
+}
+.zhp-group-name {
+  display: block;
+  font-family: var(--zhp-font-display);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+}
+.zhp-group-age {
+  display: block;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--zhp-ink-muted);
+}
+
+/* ---------- Pasek informacyjny (InfoBar) ---------- */
+.zhp-infobar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--zhp-space-3) var(--zhp-space-6);
+  padding: var(--zhp-space-4) var(--zhp-space-8);
+  background: var(--zhp-surface-brand-strong);
+  color: var(--zhp-ink-inverse);
+  font-size: 15px;
+  line-height: 24px;
+}
+.zhp-infobar p {
+  margin: 0;
+}
+.zhp-infobar a:not(.zhp-btn) {
+  color: var(--zhp-ink-inverse);
+}
+.zhp-infobar :focus-visible {
+  outline-color: var(--zhp-focus-ring-inverse);
+}
+
+/* ---------- Placeholder znaku (dopóki nie ma oficjalnego pliku; nigdy nie rysuj znaku) ---------- */
+.zhp-logo-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--zhp-header-logo-height);
+  padding: 0 var(--zhp-space-4);
+  border: 2px dashed var(--zhp-green-dark);
+  color: var(--zhp-green-dark);
+  font-size: 14px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+.zhp-logo-placeholder--inverse {
+  border-color: var(--zhp-white);
+  color: var(--zhp-white);
+}

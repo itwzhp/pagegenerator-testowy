@@ -1,0 +1,87 @@
+---
+// Deklaracja dostępności w układzie wymaganym przez ustawę o dostępności cyfrowej (DESIGN.md §12).
+// Szablon spełnia WCAG 2.1 AA w zakresie layoutu i komponentów; jednostka odpowiada za treści (alt, PDF-y, filmy).
+import Podstrona from '../layouts/Podstrona.astro';
+import { site } from '../lib/site';
+import { dataIso, formatujDate, hrefTelefonu } from '../lib/format';
+
+interface Props {
+  /** Data publikacji strony. */
+  publikacja: Date;
+  /** Data ostatniej istotnej aktualizacji strony. */
+  aktualizacja: Date;
+  /** Data sporządzenia deklaracji (samoocena). */
+  sporzadzenie: Date;
+  /** Osoba do kontaktu w sprawie dostępności (stopień, imię i nazwisko). */
+  osobaKontaktowa?: string;
+  /** Znane braki, np. „część archiwalnych dokumentów PDF nie jest dostępna cyfrowo”. */
+  wylaczenia?: string[];
+  /** Opis dostępności architektonicznej siedziby (wejście, winda, toaleta, pies asystujący). */
+  architektoniczna?: string;
+}
+
+const {
+  publikacja,
+  aktualizacja,
+  sporzadzenie,
+  osobaKontaktowa,
+  wylaczenia = [],
+  architektoniczna = '[opis dostępności architektonicznej siedziby – do uzupełnienia]',
+} = Astro.props;
+const k = site.kontakt;
+const adresStrony = site.adres ?? '';
+---
+
+<Podstrona tytul="Deklaracja dostępności" proza>
+  <p id="a11y-wstep">
+    <span id="a11y-podmiot">{site.nazwa}</span> chce, żeby jej strona internetowa była dostępna dla wszystkich, także dla
+    osób z niepełnosprawnościami. Stronę tworzymy zgodnie ze standardem WCAG 2.1 na poziomie AA, a deklarację
+    przygotowaliśmy na wzór ustawy z dnia 4 kwietnia 2019 r. o dostępności cyfrowej stron internetowych i aplikacji
+    mobilnych podmiotów publicznych. Deklaracja dotyczy strony{' '}
+    {adresStrony ? <a id="a11y-url" href={adresStrony}>{adresStrony}</a> : 'internetowej jednostki'}.
+  </p>
+  <ul>
+    <li>Data publikacji strony: <time id="a11y-data-publikacja" datetime={dataIso(publikacja)}>{formatujDate(publikacja)}</time>.</li>
+    <li>Data ostatniej istotnej aktualizacji: <time id="a11y-data-aktualizacja" datetime={dataIso(aktualizacja)}>{formatujDate(aktualizacja)}</time>.</li>
+  </ul>
+
+  <h2 id="a11y-status">Stan dostępności cyfrowej</h2>
+  {
+    wylaczenia.length === 0 ? (
+      <p>Strona jest zgodna ze standardem WCAG 2.1 na poziomie AA.</p>
+    ) : (
+      <>
+        <p>Strona jest częściowo zgodna ze standardem WCAG 2.1 na poziomie AA z powodu niezgodności wymienionych poniżej:</p>
+        <ul>
+          {wylaczenia.map((w) => (
+            <li>{w}</li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  <h2>Przygotowanie deklaracji</h2>
+  <p>
+    Deklarację sporządzono <time id="a11y-data-sporzadzenie" datetime={dataIso(sporzadzenie)}>{formatujDate(sporzadzenie)}</time> na
+    podstawie samooceny przeprowadzonej przez jednostkę.
+  </p>
+  <p>Na stronie można używać standardowych skrótów klawiaturowych przeglądarki. Strona nie używa plików cookies.</p>
+
+  <h2 id="a11y-kontakt">Informacje zwrotne i dane kontaktowe</h2>
+  <p>
+    Jeśli zauważysz problem z dostępnością strony, napisz do nas.
+    {osobaKontaktowa && <> Osobą kontaktową jest <span id="a11y-osoba">{osobaKontaktowa}</span>.</>}
+    {k.email && <> E-mail: <a id="a11y-email" href={`mailto:${k.email}`}>{k.email}</a>.</>}
+    {k.telefon && <> Telefon: <a id="a11y-telefon" href={hrefTelefonu(k.telefon)}>{k.telefon}</a>.</>}
+    {' '}Tą samą drogą możesz złożyć wniosek o udostępnienie niedostępnej informacji lub żądanie zapewnienia dostępności.
+  </p>
+  <p id="a11y-procedura">
+    W zgłoszeniu podaj swoje dane kontaktowe, wskaż stronę lub jej element i napisz, w jakiej formie chcesz otrzymać
+    informację. Odpowiemy niezwłocznie, nie później niż w ciągu 7 dni. Jeśli nie będziemy mogli zapewnić dostępności,
+    zaproponujemy inny sposób dostępu do informacji.
+  </p>
+
+  <h2 id="a11y-architektura">Dostępność architektoniczna</h2>
+  <p>{architektoniczna}</p>
+</Podstrona>

@@ -1,26 +1,155 @@
 ---
+// Stopka strony (DESIGN.md §10 SiteFooter, §12): ciemne tło, biały identyfikator, kontakt, menu,
+// media społecznościowe, przynależność do ZHP/WOSM/WAGGGS i linki prawne. Dane z site.config.ts.
+import Identyfikator from './Identyfikator.astro';
 import { site } from '../lib/site';
+import { hrefTelefonu } from '../lib/format';
 
-const { email, telefon, adres } = site.kontakt;
+const { kontakt, spolecznosci, nadrzedna } = site;
+const media = [
+  ['Facebook', spolecznosci.facebook],
+  ['Instagram', spolecznosci.instagram],
+  ['YouTube', spolecznosci.youtube],
+  ['TikTok', spolecznosci.tiktok],
+].filter((m): m is [string, string] => Boolean(m[1]));
+const rok = new Date().getFullYear();
 ---
 
-<footer class="stopka">
+<footer class="zhp-footer zhp-on-dark">
   <div class="zhp-kontener">
-    <p><strong>{site.nazwa}</strong> · Związek Harcerstwa Polskiego</p>
-    {adres && <p>{adres}</p>}
-    {email && <p><a href={`mailto:${email}`}>{email}</a></p>}
-    {telefon && <p><a href={`tel:${telefon.replace(/\s/g, '')}`}>{telefon}</a></p>}
+    <div class="zhp-footer-grid">
+      <div class="zhp-footer-marka">
+        <Identyfikator wariant="bialy" />
+        <p class="zhp-footer-nazwa">{site.nazwa}</p>
+      </div>
+
+      <div>
+        <h2 class="zhp-footer-h">Kontakt</h2>
+        <ul>
+          {kontakt.adres && <li>{kontakt.adres}</li>}
+          {kontakt.email && <li><a href={`mailto:${kontakt.email}`}>{kontakt.email}</a></li>}
+          {kontakt.telefon && <li><a href={hrefTelefonu(kontakt.telefon)}>{kontakt.telefon}</a></li>}
+          {kontakt.dyzury && <li>Dyżury: {kontakt.dyzury}</li>}
+        </ul>
+      </div>
+
+      {
+        site.nawigacja.length > 0 && (
+          <div>
+            <h2 class="zhp-footer-h">Na skróty</h2>
+            <ul>
+              {site.nawigacja.map((poz) => (
+                <li>
+                  <a href={poz.href}>{poz.etykieta}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      <div>
+        <h2 class="zhp-footer-h">ZHP</h2>
+        <ul>
+          {
+            nadrzedna && (
+              <li>
+                <a href={nadrzedna.url}>{nadrzedna.nazwa}</a>
+              </li>
+            )
+          }
+          <li><a href="https://zhp.pl">Związek Harcerstwa Polskiego</a></li>
+          {site.linki.map((l) => <li><a href={l.href}>{l.etykieta}</a></li>)}
+        </ul>
+        <p class="zhp-footer-czlonkostwo">ZHP jest członkiem WOSM i WAGGGS.</p>
+      </div>
+
+      {
+        media.length > 0 && (
+          <div>
+            <h2 class="zhp-footer-h">Obserwuj nas</h2>
+            <ul>
+              {media.map(([nazwa, url]) => (
+                <li>
+                  <a href={url} rel="noopener">
+                    {nazwa}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+
+    <div class="zhp-footer-legal">
+      <span>© {rok} {site.nazwa}</span>
+      {site.linkiPrawne.map((l) => <a href={l.href}>{l.etykieta}</a>)}
+    </div>
   </div>
 </footer>
 
 <style>
-  .stopka {
-    border-top: 1px solid var(--zhp-kolor-obramowania);
-    color: var(--zhp-kolor-tekstu-drugorzedny);
-    padding-block: var(--zhp-odstep-4);
-    font-size: 0.9rem;
+  .zhp-footer {
+    padding-block: var(--zhp-space-16) var(--zhp-space-8);
+    background: var(--zhp-surface-inverse);
+    color: var(--zhp-ink-inverse);
+    font-size: 15px;
+    line-height: 24px;
   }
-  p {
-    margin: var(--zhp-odstep-1) 0;
+  .zhp-footer a {
+    color: var(--zhp-ink-inverse);
+  }
+  .zhp-footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--zhp-space-8);
+  }
+  .zhp-footer-marka {
+    grid-column: 1 / -1;
+  }
+  @media (min-width: 1024px) {
+    .zhp-footer-grid {
+      grid-template-columns: 1.4fr repeat(4, 1fr);
+    }
+    .zhp-footer-marka {
+      grid-column: auto;
+    }
+  }
+  .zhp-footer-nazwa {
+    margin: var(--zhp-space-4) 0 0;
+    font-family: var(--zhp-font-display);
+    font-weight: 700;
+  }
+  .zhp-footer-h {
+    margin: 0 0 var(--zhp-space-3);
+    font-family: var(--zhp-font-display);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+    text-transform: none;
+    color: var(--zhp-green);
+  }
+  .zhp-footer ul {
+    display: grid;
+    gap: var(--zhp-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .zhp-footer-czlonkostwo {
+    margin: var(--zhp-space-4) 0 0;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .zhp-footer-legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zhp-space-2) var(--zhp-space-6);
+    margin-top: var(--zhp-space-12);
+    padding-top: var(--zhp-space-6);
+    border-top: var(--zhp-rule-hairline) solid var(--zhp-grey-dark);
+    font-size: 14px;
+    line-height: 20px;
   }
 </style>

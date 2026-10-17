@@ -1,0 +1,72 @@
+---
+// Zespół (komenda, komisja rewizyjna, KSI…): nazwa, opis, kadencja, kontakt, lista „stopień imię nazwisko – funkcja”.
+import Srodtytul from './Srodtytul.astro';
+import { hrefTelefonu, osobaZeStopniem } from '../lib/format';
+import type { Zespol } from '../lib/tresci';
+
+interface Props {
+  zespol: Zespol;
+  poziom?: 2 | 3;
+}
+
+const { zespol, poziom = 2 } = Astro.props;
+const d = zespol.data;
+---
+
+<section class="zhp-zespol" id={zespol.id}>
+  <Srodtytul poziom={poziom} rozmiar={poziom === 2 ? 'duzy' : 'maly'}>{d.nazwa}</Srodtytul>
+  {d.opis && <p class="zhp-tekst">{d.opis}</p>}
+  {
+    (d.kadencja || d.email) && (
+      <p class="zhp-meta">
+        {d.kadencja && <span>Kadencja {d.kadencja}</span>}
+        {d.kadencja && d.email && ' · '}
+        {d.email && <a href={`mailto:${d.email}`}>{d.email}</a>}
+      </p>
+    )
+  }
+  <ul class="zhp-zespol-lista">
+    {
+      d.czlonkowie.map((o) => (
+        <li>
+          <span class="zhp-zespol-funkcja">{o.funkcja}</span>
+          <span class="zhp-zespol-osoba">{osobaZeStopniem(o)}</span>
+          {o.email && <a href={`mailto:${o.email}`}>{o.email}</a>}
+          {o.telefon && <a href={hrefTelefonu(o.telefon)}>{o.telefon}</a>}
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .zhp-zespol + .zhp-zespol {
+    margin-top: var(--zhp-space-16);
+  }
+  .zhp-zespol-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--zhp-space-6);
+    margin: var(--zhp-space-6) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .zhp-zespol-lista li {
+    display: flex;
+    flex-direction: column;
+    padding-left: var(--zhp-space-4);
+    border-left: 4px solid var(--zhp-green);
+    font-size: 15px;
+    line-height: 22px;
+  }
+  .zhp-zespol-funkcja {
+    color: var(--zhp-ink-muted);
+    font-size: 14px;
+  }
+  .zhp-zespol-osoba {
+    font-family: var(--zhp-font-display);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+  }
+</style>

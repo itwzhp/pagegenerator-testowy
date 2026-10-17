@@ -1,100 +1,81 @@
 ---
+// Strona główna. Modelowy układ (DESIGN.md §11): hero → dla kogo → aktualności → kalendarz → 1,5% → w liczbach.
+// Plik jednostki: sekcje można usuwać, przestawiać i dodawać.
 import Strona from '@core/layouts/Strona.astro';
+import Hero from '@core/components/Hero.astro';
+import Sekcja from '@core/components/Sekcja.astro';
+import GrupyWiekowe from '@core/components/GrupyWiekowe.astro';
+import ListaAktualnosci from '@core/components/ListaAktualnosci.astro';
+import ListaWydarzen from '@core/components/ListaWydarzen.astro';
+import JedenProcent from '@core/components/JedenProcent.astro';
+import Liczby from '@core/components/Liczby.astro';
+import Przycisk from '@core/components/Przycisk.astro';
 import { site } from '@core/lib/site';
-import Karty from '../components/Karty.astro';
-import komenda from '../../content/komenda.json';
-import druzyny from '../../content/druzyny.json';
+import { pobierzAktualnosci, pobierzWydarzenia } from '@core/lib/tresci';
 
-const { email, telefon, adres } = site.kontakt;
+const aktualnosci = await pobierzAktualnosci(3);
+const wydarzenia = await pobierzWydarzenia('nadchodzace', 3);
 ---
 
 <Strona>
-  <section class="powitanie">
-    <div class="zhp-kontener">
-      <h1>{site.nazwa}</h1>
-      <p class="lead">{site.opis}</p>
-      <nav class="skroty" aria-label="Na tej stronie">
-        <a href="#komenda">Komenda</a>
-        <a href="#druzyny">Drużyny</a>
-        <a href="#kontakt">Kontakt</a>
-      </nav>
-    </div>
-  </section>
-
-  <Karty
-    id="komenda"
-    naglowek="Komenda hufca"
-    karty={komenda.map((o) => ({ tytul: `${o.stopien} ${o.imieNazwisko}`, podtytul: o.funkcja }))}
+  <Hero
+    nadtytul={site.nazwa}
+    tytul="Przygoda, która zostaje na całe życie"
+    wstep="Gromada zuchowa i drużyny harcerskie w Kartuzach i Żukowie. Biwaki, rajdy, obozy – i ludzie, z którymi chce się działać."
+    przyciski={[
+      { etykieta: 'Zapisz dziecko', href: '/dla-rodzicow#zapisy' },
+      { etykieta: 'Znajdź drużynę', href: '/jednostki' },
+    ]}
+    szybkieLinki={[
+      { etykieta: 'Ile to kosztuje?', href: '/dla-rodzicow#koszty' },
+      { etykieta: 'Gdzie są zbiórki?', href: '/jednostki' },
+      { etykieta: 'Kiedy obóz?', href: '/wydarzenia' },
+    ]}
   />
 
-  <Karty
-    id="druzyny"
-    naglowek="Nasze drużyny"
-    karty={druzyny.map((d) => ({ tytul: d.nazwa, podtytul: d.rodzaj }))}
-  />
+  <Sekcja tytul="Dla kogo jest harcerstwo" tlo="tint">
+    <GrupyWiekowe linkDo="/jednostki" />
+  </Sekcja>
 
-  <section class="zhp-kontener sekcja" id="kontakt" aria-labelledby="kontakt-naglowek">
-    <h2 id="kontakt-naglowek">Kontakt</h2>
-    <dl class="kontakt">
-      {adres && (<><dt>Siedziba</dt><dd>{adres}</dd></>)}
-      {email && (<><dt>E-mail</dt><dd><a href={`mailto:${email}`}>{email}</a></dd></>)}
-      {telefon && (<><dt>Telefon</dt><dd><a href={`tel:${telefon.replace(/\s/g, '')}`}>{telefon}</a></dd></>)}
-    </dl>
-    {
-      site.linki.length > 0 && (
-        <>
-          <h3>Przydatne linki</h3>
-          <ul>
-            {site.linki.map((l) => (
-              <li><a href={l.url}>{l.etykieta}</a></li>
-            ))}
-          </ul>
-        </>
-      )
-    }
-  </section>
+  {
+    aktualnosci.length > 0 && (
+      <Sekcja tytul="Aktualności">
+        <ListaAktualnosci wpisy={aktualnosci} />
+        <p class="zhp-dalej">
+          <Przycisk href="/aktualnosci" wariant="drugorzedny">
+            Więcej aktualności
+          </Przycisk>
+        </p>
+      </Sekcja>
+    )
+  }
+
+  {
+    wydarzenia.length > 0 && (
+      <Sekcja tytul="Najbliższe wydarzenia" tlo="tint">
+        <ListaWydarzen wydarzenia={wydarzenia} />
+        <p class="zhp-dalej">
+          <Przycisk href="/wydarzenia" wariant="drugorzedny">
+            Cały kalendarz
+          </Przycisk>
+        </p>
+      </Sekcja>
+    )
+  }
+
+  {site.jedenProcent && <JedenProcent wiecej="/wesprzyj" />}
+
+  {
+    site.liczby && (
+      <Sekcja tytul="Hufiec w liczbach">
+        <Liczby />
+      </Sekcja>
+    )
+  }
 </Strona>
 
 <style>
-  .powitanie {
-    background: var(--zhp-kolor-podstawowy-ciemny);
-    color: var(--zhp-kolor-tla);
-    padding-block: var(--zhp-odstep-5);
-  }
-  .powitanie h1 {
-    margin-top: 0;
-    font-size: clamp(1.75rem, 5vw, 2.75rem);
-    overflow-wrap: break-word;
-  }
-  .lead {
-    font-size: 1.15rem;
-    max-width: 40rem;
-  }
-  .skroty {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--zhp-odstep-3);
-    margin-top: var(--zhp-odstep-4);
-  }
-  .skroty a {
-    color: var(--zhp-kolor-tla);
-    border: 1px solid var(--zhp-kolor-tla);
-    border-radius: var(--zhp-promien);
-    padding: var(--zhp-odstep-2) var(--zhp-odstep-3);
-    text-decoration: none;
-  }
-  .sekcja {
-    padding-block: var(--zhp-odstep-4);
-  }
-  .kontakt {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: var(--zhp-odstep-2) var(--zhp-odstep-4);
-  }
-  .kontakt dt {
-    font-weight: 700;
-  }
-  .kontakt dd {
-    margin: 0;
+  .zhp-dalej {
+    margin: var(--zhp-space-8) 0 0;
   }
 </style>

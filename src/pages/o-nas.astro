@@ -1,0 +1,43 @@
+---
+// O nas: kim jesteśmy, gdzie działamy, patron, historia w skrócie. Fakty tylko od jednostki.
+import Podstrona from '@core/layouts/Podstrona.astro';
+import Srodtytul from '@core/components/Srodtytul.astro';
+import Wyroznienie from '@core/components/Wyroznienie.astro';
+import Liczby from '@core/components/Liczby.astro';
+import { site } from '@core/lib/site';
+---
+
+<Podstrona tytul="O nas" wstep={site.opis}>
+  <div class="zhp-tekst">
+    <p>
+      Działamy w Kartuzach i w gminie Żukowo. Mamy gromadę zuchową, dwie drużyny harcerskie oraz drużynę
+      starszoharcerską i wędrowniczą. Zbiórki odbywają się w harcówce przy ul. Dworcowej, w szkole i w ośrodku
+      kultury. Hufiec Testowy jest hufcem przykładowym: powstał na potrzeby testów strony.
+    </p>
+  </div>
+
+  <Wyroznienie>
+    Misją ZHP jest wychowywanie młodego człowieka, czyli wspieranie go we wszechstronnym rozwoju i kształtowaniu
+    charakteru przez stawianie wyzwań.
+  </Wyroznienie>
+
+  <section class="zhp-tekst">
+    <Srodtytul rozmiar="maly">Nasz patron</Srodtytul>
+    <p>Szare Szeregi to konspiracyjne harcerstwo z czasów II wojny światowej. Ich hasło „Dziś, jutro, pojutrze”
+      i postawa służby są dla nas wzorem: uczymy się odpowiedzialności, odwagi i działania dla innych.</p>
+  </section>
+
+  <section class="zhp-tekst">
+    <Srodtytul rozmiar="maly">Historia w skrócie</Srodtytul>
+    <p>Hufiec powstał w 2026 roku jako hufiec testowy Chorągwi Gdańskiej. W tym samym roku przyjęliśmy imię
+      Szarych Szeregów i zorganizowaliśmy pierwszą inaugurację roku harcerskiego.</p>
+  </section>
+
+  {site.liczby && <Liczby />}
+</Podstrona>
+
+<style>
+  section {
+    margin-top: var(--zhp-space-12);
+  }
+</style>

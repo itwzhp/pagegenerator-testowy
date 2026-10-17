@@ -1,0 +1,37 @@
+---
+// Karta wpisu (DESIGN.md §10 NewsCard): zdjęcie 3:2, nadtytuł, tytuł, zajawka, meta. Cała karta jest linkiem.
+// Bez zdjęcia: blok koloru z palety (nigdy zdjęcie zastępcze ani wygenerowane).
+import type { Zdjecie } from '../lib/schematy';
+import { bezSierotek } from '../lib/format';
+
+interface Props {
+  href: string;
+  tytul: string;
+  nadtytul?: string;
+  zajawka?: string;
+  /** Np. „16 października 2026” albo „16 października 2026 · Harcerze”. */
+  meta?: string;
+  /** Wartość atrybutu datetime dla meta, gdy meta to data. */
+  datetime?: string;
+  zdjecie?: Zdjecie;
+  /** Poziom nagłówka tytułu w strukturze strony. */
+  poziom?: 2 | 3;
+}
+
+const { href, tytul, nadtytul, zajawka, meta, datetime, zdjecie, poziom = 3 } = Astro.props;
+const Tag = poziom === 2 ? 'h2' : 'h3';
+---
+
+<a class="zhp-card" href={href}>
+  {
+    zdjecie ? (
+      <img class="zhp-card-media" src={zdjecie.src} alt={zdjecie.alt} loading="lazy" decoding="async" />
+    ) : (
+      <span class="zhp-card-media zhp-card-media--brak" aria-hidden="true" />
+    )
+  }
+  {nadtytul && <span class="zhp-card-eyebrow">{nadtytul}</span>}
+  <Tag class="zhp-card-title">{bezSierotek(tytul)}</Tag>
+  {zajawka && <p class="zhp-card-excerpt">{bezSierotek(zajawka)}</p>}
+  {meta && (datetime ? <time class="zhp-card-meta" datetime={datetime}>{meta}</time> : <span class="zhp-card-meta">{meta}</span>)}
+</a>

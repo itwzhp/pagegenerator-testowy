@@ -24,6 +24,9 @@ prosi o potwierdzenie przed merge'em.
 
 ## 2. Potwierdzenie
 
+Sprawdź, czy nie zostały placeholdery do uzupełnienia: `grep -rn "[[^]]*]" src/pages content site.config.ts`
+(pomiń składnię Markdown linków i tablic YAML). Jeśli są, wypisz je użytkownikowi i zapytaj, czy publikować mimo to.
+
 Pokaż użytkownikowi:
 - listę commitów, które wejdą: `git log --oneline origin/main..HEAD`,
 - zmienione pliki: `git diff --stat origin/main...HEAD`,

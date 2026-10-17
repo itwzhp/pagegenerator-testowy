@@ -1,0 +1,37 @@
+---
+// Siatka kart aktualności (3 w rzędzie). Gdy nie ma wpisów, pokazuje komunikat albo nic (`ukryjPusta`).
+import KartaWpisu from './KartaWpisu.astro';
+import { GRUPY } from '../lib/grupy';
+import { dataIso, formatujDate } from '../lib/format';
+import type { Aktualnosc } from '../lib/tresci';
+
+interface Props {
+  wpisy: Aktualnosc[];
+  /** Na stronie głównej: brak sekcji zamiast komunikatu „brak aktualności”. */
+  ukryjPusta?: boolean;
+  /** Prefiks adresu wpisu. */
+  sciezka?: string;
+}
+
+const { wpisy, ukryjPusta = false, sciezka = '/aktualnosci' } = Astro.props;
+---
+
+{
+  wpisy.length > 0 ? (
+    <div class="zhp-siatka">
+      {wpisy.map((w) => (
+        <KartaWpisu
+          href={`${sciezka}/${w.id}`}
+          tytul={w.data.tytul}
+          nadtytul={w.data.kategoria}
+          zajawka={w.data.zajawka}
+          zdjecie={w.data.zdjecie}
+          meta={[formatujDate(w.data.data), ...w.data.grupy.map((g) => GRUPY[g].nazwa)].join(' · ')}
+          datetime={dataIso(w.data.data)}
+        />
+      ))}
+    </div>
+  ) : (
+    !ukryjPusta && <p class="zhp-meta">Na razie nie ma tu żadnych wpisów.</p>
+  )
+}

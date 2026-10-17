@@ -1,0 +1,102 @@
+---
+// Lista wydarzeń (kalendarz): data, typ, tytuł, miejsce, grupy, link do zapisów.
+// Kolejność i podział nadchodzące/minione: pobierzWydarzenia() z core/lib/tresci.ts.
+import { render } from 'astro:content';
+import Przycisk from './Przycisk.astro';
+import { GRUPY } from '../lib/grupy';
+import { bezSierotek, dataIso, formatujZakres } from '../lib/format';
+import type { Wydarzenie } from '../lib/tresci';
+
+interface Props {
+  wydarzenia: Wydarzenie[];
+  /** Pokaż pełny opis (treść Markdown) pod każdym wydarzeniem; domyślnie tylko zajawka. */
+  zOpisem?: boolean;
+  /** Tekst, gdy lista jest pusta. Pusty string = nic nie renderuj. */
+  pusta?: string;
+  poziom?: 2 | 3;
+}
+
+const { wydarzenia, zOpisem = false, pusta = 'Nie mamy teraz zaplanowanych wydarzeń.', poziom = 3 } = Astro.props;
+const Tag = poziom === 2 ? 'h2' : 'h3';
+const pozycje = await Promise.all(
+  wydarzenia.map(async (w) => ({ w, Tresc: zOpisem ? (await render(w)).Content : undefined })),
+);
+const wielka = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+---
+
+{
+  pozycje.length > 0 ? (
+    <ol class="zhp-wydarzenia">
+      {pozycje.map(({ w, Tresc }) => (
+        <li class="zhp-wydarzenie" id={w.id}>
+          <p class="zhp-wydarzenie-data">
+            <time datetime={dataIso(w.data.od)}>{formatujZakres(w.data.od, w.data.do)}</time>
+          </p>
+          <div class="zhp-wydarzenie-tresc">
+            <span class="zhp-card-eyebrow">{wielka(w.data.typ)}</span>
+            <Tag class="zhp-card-title">{bezSierotek(w.data.tytul)}</Tag>
+            <p class="zhp-meta">
+              {[w.data.miejsce, ...w.data.grupy.map((g) => GRUPY[g].nazwa)].filter(Boolean).join(' · ')}
+            </p>
+            {w.data.zajawka && <p>{bezSierotek(w.data.zajawka)}</p>}
+            {Tresc && (
+              <div class="zhp-proza">
+                <Tresc />
+              </div>
+            )}
+            {w.data.zapisy && (
+              <Przycisk href={w.data.zapisy} wariant="drugorzedny">
+                Zapisz się
+              </Przycisk>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    pusta && <p class="zhp-meta">{pusta}</p>
+  )
+}
+
+<style>
+  .zhp-wydarzenia {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .zhp-wydarzenie {
+    display: grid;
+    gap: var(--zhp-space-2) var(--zhp-space-8);
+    padding-block: var(--zhp-space-6);
+    border-top: var(--zhp-rule-hairline) solid var(--zhp-border);
+  }
+  .zhp-wydarzenie:last-child {
+    border-bottom: var(--zhp-rule-hairline) solid var(--zhp-border);
+  }
+  @media (min-width: 640px) {
+    .zhp-wydarzenie {
+      grid-template-columns: 14rem 1fr;
+    }
+  }
+  .zhp-wydarzenie-data {
+    margin: 0;
+    padding-left: var(--zhp-space-3);
+    border-left: 4px solid var(--zhp-green);
+    font-family: var(--zhp-font-display);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+    color: var(--zhp-ink-brand);
+  }
+  .zhp-wydarzenie-tresc {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--zhp-space-2);
+  }
+  .zhp-wydarzenie-tresc p {
+    margin: 0;
+  }
+</style>

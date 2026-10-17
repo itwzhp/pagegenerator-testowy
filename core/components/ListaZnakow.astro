@@ -1,0 +1,18 @@
+---
+// Lista ✓ / × / → (DESIGN.md §10 Checklist), np. „Co zabrać na biwak”, „Czego nie zabieramy”.
+// Pozycje: mała litera na początku, przecinek po każdej, kropka po ostatniej. Znaczenie niesie treść, nie kolor.
+interface Props {
+  pozycje: string[];
+  rodzaj?: 'tak' | 'nie' | 'moze';
+  tytul?: string;
+}
+
+const { pozycje, rodzaj = 'tak', tytul } = Astro.props;
+---
+
+<div>
+  {tytul && <p class:list={['zhp-checklist-title', rodzaj === 'nie' && 'zhp-checklist-title--no']}>{tytul}</p>}
+  <ul class:list={['zhp-checklist', rodzaj === 'nie' && 'zhp-checklist--no', rodzaj === 'moze' && 'zhp-checklist--maybe']}>
+    {pozycje.map((p) => <li>{p}</li>)}
+  </ul>
+</div>

@@ -1,0 +1,88 @@
+---
+// Polityka prywatności statycznej strony jednostki: bez cookies, analityki i formularzy.
+// Jeśli jednostka doda np. osadzoną mapę, film z YouTube albo licznik odwiedzin, ten tekst trzeba uzupełnić.
+// Dane administratora potwierdza jednostka (zwykle chorągiew lub hufiec z osobowością prawną); bez nich zostaje
+// widoczny placeholder w nawiasach kwadratowych.
+import Podstrona from '../layouts/Podstrona.astro';
+import { site } from '../lib/site';
+import { formatujDate } from '../lib/format';
+
+interface Props {
+  /** Administrator danych z adresem, np. „ZHP Chorągiew Gdańska, ul. …”. */
+  administrator?: string;
+  /** Data ostatniej aktualizacji dokumentu. */
+  aktualizacja: Date;
+  /** Dodatkowe zewnętrzne usługi osadzone na stronie, np. „mapy OpenStreetMap na stronie Kontakt”. */
+  uslugiZewnetrzne?: string[];
+}
+
+const { administrator = '[administrator danych: nazwa i adres – do uzupełnienia]', aktualizacja, uslugiZewnetrzne = [] } =
+  Astro.props;
+const k = site.kontakt;
+const iod = k.iod?.email;
+---
+
+<Podstrona tytul="Polityka prywatności" opis={`Jak ${site.nazwa} chroni prywatność osób odwiedzających stronę.`} proza>
+  <p>
+    Ta strona należy do jednostki Związku Harcerstwa Polskiego: <strong>{site.nazwa}</strong>. Szanujemy Twoją
+    prywatność, dlatego strona zbiera tak mało danych, jak to możliwe.
+  </p>
+
+  <h2>Administrator danych</h2>
+  <p>{administrator}</p>
+  {
+    (k.email || iod) && (
+      <p>
+        W sprawach ochrony danych napisz do nas:{' '}
+        {iod ? <a href={`mailto:${iod}`}>{iod}</a> : <a href={`mailto:${k.email}`}>{k.email}</a>}.
+      </p>
+    )
+  }
+
+  <h2>Pliki cookies i statystyki</h2>
+  <p>
+    Strona nie używa plików cookies, narzędzi analitycznych ani pikseli śledzących. Nie musisz niczego akceptować, żeby z
+    niej korzystać.
+  </p>
+
+  <h2>Dane techniczne</h2>
+  <p>
+    Stronę udostępnia Cloudflare, Inc. Przy każdym wyświetleniu strony serwer przetwarza dane techniczne, takie jak adres
+    IP, rodzaj przeglądarki i czas odwiedzin. Służą one wyłącznie do dostarczenia strony i ochrony przed atakami i nie są
+    przez nas łączone z innymi danymi.
+  </p>
+
+  {
+    uslugiZewnetrzne.length > 0 && (
+      <>
+        <h2>Usługi zewnętrzne</h2>
+        <p>Na stronie osadzamy treści zewnętrznych dostawców, którzy mogą przetwarzać Twoje dane według własnych zasad:</p>
+        <ul>
+          {uslugiZewnetrzne.map((u) => (
+            <li>{u}</li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  <h2>Kontakt mailowy i telefoniczny</h2>
+  <p>
+    Jeśli do nas napiszesz lub zadzwonisz, użyjemy Twoich danych tylko po to, żeby odpowiedzieć na wiadomość i załatwić
+    sprawę.
+  </p>
+
+  <h2>Zdjęcia i dane osób</h2>
+  <p>
+    Publikujemy zdjęcia i dane osób za ich zgodą (w przypadku osób niepełnoletnich: za zgodą rodziców lub opiekunów).
+    Jeśli chcesz, żebyśmy usunęli zdjęcie lub informację o Tobie, napisz do nas.
+  </p>
+
+  <h2>Twoje prawa</h2>
+  <p>
+    Masz prawo dostępu do swoich danych, ich sprostowania, usunięcia lub ograniczenia przetwarzania, a także prawo
+    wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.
+  </p>
+
+  <p class="zhp-meta">Ostatnia aktualizacja: {formatujDate(aktualizacja)}</p>
+</Podstrona>

@@ -1,0 +1,32 @@
+/*
+ * Fonty ZHP (KIW s. 35): tylko darmowe odmiany Museo Sans 500 oraz Museo 300 / 500 / 700.
+ * Plik szablonu (upstream). Ścieżki są względne, Vite dołącza pliki do builda z hashem w nazwie.
+ */
+@font-face {
+  font-family: 'Museo Sans';
+  src: url('../assets/fonty/MuseoSans-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Museo';
+  src: url('../assets/fonty/Museo-300.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Museo';
+  src: url('../assets/fonty/Museo-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Museo';
+  src: url('../assets/fonty/Museo-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

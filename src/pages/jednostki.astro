@@ -1,0 +1,14 @@
+---
+import Podstrona from '@core/layouts/Podstrona.astro';
+import ListaJednostek from '@core/components/ListaJednostek.astro';
+import { pobierzJednostki } from '@core/lib/tresci';
+
+const jednostki = await pobierzJednostki();
+---
+
+<Podstrona
+  tytul="Drużyny i gromady"
+  wstep="Znajdź drużynę najbliżej domu. Przy każdej podajemy, gdzie i kiedy odbywają się zbiórki oraz jak skontaktować się z kadrą."
+>
+  <ListaJednostek jednostki={jednostki} grupuj="grupa" />
+</Podstrona>

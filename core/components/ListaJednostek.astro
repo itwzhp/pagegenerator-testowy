@@ -1,0 +1,69 @@
+---
+// Lista drużyn i gromad pogrupowana według grupy metodycznej, miejscowości albo szczepu.
+// Jednostka wielopoziomowa trafia do grupy swojej najmłodszej grupy metodycznej.
+import KartaJednostki from './KartaJednostki.astro';
+import Srodtytul from './Srodtytul.astro';
+import ZnakGrupy from './ZnakGrupy.astro';
+import { GRUPY, KLUCZE_GRUP, sortujGrupy, type KluczGrupy } from '../lib/grupy';
+import type { Jednostka } from '../lib/tresci';
+
+interface Props {
+  jednostki: Jednostka[];
+  grupuj?: 'grupa' | 'miejscowosc' | 'szczep' | 'brak';
+}
+
+const { jednostki, grupuj = 'grupa' } = Astro.props;
+
+type Blok = { klucz: string; tytul: string; grupa?: KluczGrupy; lista: Jednostka[] };
+const bloki: Blok[] = [];
+
+if (grupuj === 'brak') {
+  bloki.push({ klucz: 'wszystkie', tytul: '', lista: jednostki });
+} else if (grupuj === 'grupa') {
+  for (const g of KLUCZE_GRUP) {
+    const lista = jednostki.filter((j) => sortujGrupy(j.data.grupy)[0] === g);
+    if (lista.length) bloki.push({ klucz: g, tytul: GRUPY[g].nazwa, grupa: g, lista });
+  }
+} else {
+  const pole = grupuj === 'miejscowosc' ? 'miejscowosc' : 'szczep';
+  const inne = grupuj === 'miejscowosc' ? 'Pozostałe' : 'Jednostki samodzielne';
+  const mapa = new Map<string, Jednostka[]>();
+  for (const j of jednostki) {
+    const k = j.data[pole] ?? inne;
+    mapa.set(k, [...(mapa.get(k) ?? []), j]);
+  }
+  for (const [k, lista] of [...mapa].sort(([a], [b]) => (a === inne ? 1 : b === inne ? -1 : a.localeCompare(b, 'pl')))) {
+    bloki.push({ klucz: k, tytul: k, lista });
+  }
+}
+---
+
+{jednostki.length === 0 && <p class="zhp-meta">Lista jednostek jest w przygotowaniu.</p>}
+{
+  bloki.map((b) => (
+    <section class="zhp-jednostki-blok" id={b.grupa} aria-label={b.tytul || undefined}>
+      {b.grupa ? (
+        <div class="zhp-jednostki-naglowek">
+          <h2 class="zhp-sr-only">{b.tytul}</h2>
+          <ZnakGrupy grupa={b.grupa} />
+        </div>
+      ) : (
+        b.tytul && <Srodtytul rozmiar="maly">{b.tytul}</Srodtytul>
+      )}
+      <div class="zhp-siatka">
+        {b.lista.map((j) => (
+          <KartaJednostki jednostka={j} pokazGrupy={grupuj !== 'grupa' || j.data.grupy.length > 1} />
+        ))}
+      </div>
+    </section>
+  ))
+}
+
+<style>
+  .zhp-jednostki-blok + .zhp-jednostki-blok {
+    margin-top: var(--zhp-space-16);
+  }
+  .zhp-jednostki-naglowek {
+    margin-bottom: var(--zhp-space-6);
+  }
+</style>

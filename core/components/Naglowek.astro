@@ -1,22 +1,204 @@
 ---
+// Nagłówek strony (DESIGN.md §10 SiteHeader): identyfikator po lewej, menu, jedno CTA po prawej.
+// Menu i CTA pochodzą z site.config.ts (`nawigacja`, `cta`).
+// Na telefonie menu zwija się pod przyciskiem; bez JavaScriptu jest zawsze rozwinięte.
+import Identyfikator from './Identyfikator.astro';
+import Przycisk from './Przycisk.astro';
 import { site } from '../lib/site';
+
+const sciezka = Astro.url.pathname.replace(/\/$/, '') || '/';
+const czyAktywny = (href: string) => {
+  if (!href.startsWith('/')) return false;
+  const cel = href.replace(/\/$/, '') || '/';
+  return cel === '/' ? sciezka === '/' : sciezka === cel || sciezka.startsWith(`${cel}/`);
+};
 ---
 
-<header class="naglowek">
-  <div class="zhp-kontener">
-    <a class="nazwa" href="/">{site.nazwa}</a>
+<header class="zhp-header">
+  <div class="zhp-header-pasek">
+    <a class="zhp-header-logo" href="/" aria-label={`${site.nazwa}: strona główna`}>
+      <Identyfikator />
+      {!site.identyfikator && <span class="zhp-header-jednostka">{site.nazwa}</span>}
+    </a>
+    {
+      site.nawigacja.length > 0 && (
+        <button class="zhp-menu-przelacznik" type="button" aria-expanded="false" aria-controls="zhp-menu" hidden>
+          <span class="zhp-menu-ikona" aria-hidden="true" />
+          Menu
+        </button>
+      )
+    }
   </div>
+  <nav class="zhp-header-menu" id="zhp-menu" aria-label="Menu główne">
+    {
+      site.nawigacja.length > 0 && (
+        <ul class="zhp-nav">
+          {site.nawigacja.map((poz) => (
+            <li>
+              <a href={poz.href} aria-current={czyAktywny(poz.href) ? 'page' : undefined}>
+                {poz.etykieta}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    {site.cta && <Przycisk href={site.cta.href}>{site.cta.etykieta}</Przycisk>}
+  </nav>
 </header>
 
-<style>
-  .naglowek {
-    background: var(--zhp-kolor-podstawowy);
-    padding-block: var(--zhp-odstep-3);
+<script>
+  const naglowek = document.querySelector<HTMLElement>('.zhp-header');
+  const przycisk = naglowek?.querySelector<HTMLButtonElement>('.zhp-menu-przelacznik');
+  if (naglowek && przycisk) {
+    naglowek.dataset.js = '';
+    przycisk.hidden = false;
+    przycisk.addEventListener('click', () => {
+      const otwarte = przycisk.getAttribute('aria-expanded') === 'true';
+      przycisk.setAttribute('aria-expanded', String(!otwarte));
+    });
   }
-  .nazwa {
-    color: var(--zhp-kolor-tla);
-    font-weight: 700;
-    font-size: 1.25rem;
+</script>
+
+<style>
+  .zhp-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--zhp-space-4) var(--zhp-space-8);
+    padding: var(--zhp-space-3) var(--zhp-gutter);
+    background: var(--zhp-surface);
+    border-bottom: var(--zhp-rule-hairline) solid var(--zhp-border);
+  }
+  .zhp-header-pasek {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--zhp-space-4);
+    flex: 1 1 auto;
+  }
+  .zhp-header-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--zhp-space-4);
+    color: var(--zhp-ink);
     text-decoration: none;
+  }
+  /* Nazwa jednostki zwykłym tekstem, poza polem ochronnym identyfikatora (DESIGN.md §4). */
+  .zhp-header-jednostka {
+    max-width: 18ch;
+    padding-left: var(--zhp-space-4);
+    border-left: var(--zhp-rule-hairline) solid var(--zhp-border);
+    font-family: var(--zhp-font-display);
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 22px;
+  }
+  .zhp-header-menu {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--zhp-space-4) var(--zhp-space-8);
+  }
+  .zhp-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zhp-space-2) var(--zhp-space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .zhp-nav a {
+    display: inline-block;
+    padding: var(--zhp-space-2) 0;
+    border-bottom: 3px solid transparent;
+    color: var(--zhp-ink);
+    text-decoration: none;
+    font-size: 17px;
+    line-height: 24px;
+  }
+  .zhp-nav a:hover,
+  .zhp-nav a[aria-current='page'] {
+    border-bottom-color: var(--zhp-green);
+  }
+  .zhp-menu-przelacznik {
+    display: none;
+    align-items: center;
+    gap: var(--zhp-space-2);
+    min-height: 44px;
+    padding: var(--zhp-space-2) var(--zhp-space-3);
+    border: 2px solid var(--zhp-border-strong);
+    border-radius: var(--zhp-radius-sm);
+    background: var(--zhp-surface);
+    color: var(--zhp-ink);
+    font: inherit;
+    cursor: pointer;
+  }
+  .zhp-menu-ikona,
+  .zhp-menu-ikona::before,
+  .zhp-menu-ikona::after {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+  }
+  .zhp-menu-ikona {
+    position: relative;
+  }
+  .zhp-menu-ikona::before,
+  .zhp-menu-ikona::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+  .zhp-menu-ikona::before {
+    top: -6px;
+  }
+  .zhp-menu-ikona::after {
+    top: 6px;
+  }
+
+  @media (max-width: 1023px) {
+    .zhp-header-menu {
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .zhp-nav {
+      flex-direction: column;
+      gap: 0;
+      width: 100%;
+    }
+    .zhp-nav li {
+      border-top: var(--zhp-rule-hairline) solid var(--zhp-border);
+    }
+    .zhp-nav a {
+      display: block;
+      padding: var(--zhp-space-3) 0;
+    }
+    .zhp-header[data-js] .zhp-menu-przelacznik:not([hidden]) {
+      display: inline-flex;
+    }
+    .zhp-header[data-js]:has(.zhp-menu-przelacznik[aria-expanded='false']) .zhp-header-menu {
+      display: none;
+    }
+    .zhp-header[data-js] .zhp-header-menu {
+      padding-bottom: var(--zhp-space-4);
+    }
+  }
+  /* Na telefonie nazwa jednostki pod identyfikatorem, żeby zmieścił się przycisk menu. */
+  @media (max-width: 639px) {
+    .zhp-header-logo {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--zhp-space-1);
+    }
+    .zhp-header-jednostka {
+      max-width: none;
+      padding-left: 0;
+      border-left: 0;
+      font-size: 15px;
+      line-height: 20px;
+    }
   }
 </style>

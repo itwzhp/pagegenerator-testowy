@@ -1,0 +1,14 @@
+# Dane wymyślone na potrzeby testów (JEDNOSTKA.md).
+nazwa: Komisja rewizyjna hufca
+kolejnosc: 2
+kadencja: 2023–2027
+czlonkowie:
+  - stopien: hm.
+    imie: Barbara Dąbrowska
+    funkcja: przewodnicząca
+  - stopien: phm.
+    imie: Krzysztof Mazur
+    funkcja: członek
+  - stopien: pwd.
+    imie: Joanna Krawczyk
+    funkcja: członkini

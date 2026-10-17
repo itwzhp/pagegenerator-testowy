@@ -1,0 +1,48 @@
+---
+// Layout podstrony: pas tytułowy (SectionBand) + opcjonalny wstęp + treść w kontenerze.
+// Do podstron tekstowych (O nas, Dla rodziców, Kontakt…). Sekcje w slocie: <Sekcja> albo zwykła treść.
+// `proza` owija treść w .zhp-proza (Markdown/teksty: max 70 znaków w linii).
+import Strona from './Strona.astro';
+import PasTytulowy from '../components/PasTytulowy.astro';
+import { bezSierotek } from '../lib/format';
+
+interface Props {
+  tytul: string;
+  /** Meta description; domyślnie `wstep`, a bez niego opis jednostki. */
+  opis?: string;
+  /** Wstęp pod tytułem (styl lead), 1–2 zdania. */
+  wstep?: string;
+  obraz?: string;
+  typ?: 'website' | 'article';
+  proza?: boolean;
+  dofinansowanie?: boolean;
+}
+
+const { tytul, opis, wstep, obraz, typ, proza = false, dofinansowanie } = Astro.props;
+---
+
+<Strona tytul={tytul} opis={opis ?? wstep} obraz={obraz} typ={typ} dofinansowanie={dofinansowanie}>
+  <PasTytulowy>{tytul}</PasTytulowy>
+  <div class="zhp-kontener zhp-podstrona">
+    {wstep && <p class="zhp-lead zhp-tekst">{bezSierotek(wstep)}</p>}
+    {
+      proza ? (
+        <div class="zhp-proza">
+          <slot />
+        </div>
+      ) : (
+        <slot />
+      )
+    }
+  </div>
+  <slot name="pod" />
+</Strona>
+
+<style>
+  .zhp-podstrona {
+    padding-bottom: var(--zhp-space-16);
+  }
+  .zhp-podstrona > .zhp-lead {
+    margin-bottom: var(--zhp-space-12);
+  }
+</style>

@@ -1,0 +1,27 @@
+---
+import Podstrona from '@core/layouts/Podstrona.astro';
+import Srodtytul from '@core/components/Srodtytul.astro';
+import ListaWydarzen from '@core/components/ListaWydarzen.astro';
+import { pobierzWydarzenia } from '@core/lib/tresci';
+
+const nadchodzace = await pobierzWydarzenia('nadchodzace');
+const minione = await pobierzWydarzenia('minione', 6);
+---
+
+<Podstrona tytul="Kalendarz" wstep="Biwaki, rajdy, obozy i uroczystości hufca. Szczegóły i zapisy znajdziesz przy każdym wydarzeniu.">
+  <ListaWydarzen wydarzenia={nadchodzace} zOpisem />
+  {
+    minione.length > 0 && (
+      <section class="zhp-minione">
+        <Srodtytul rozmiar="maly">Ostatnio</Srodtytul>
+        <ListaWydarzen wydarzenia={minione} pusta="" />
+      </section>
+    )
+  }
+</Podstrona>
+
+<style>
+  .zhp-minione {
+    margin-top: var(--zhp-space-16);
+  }
+</style>

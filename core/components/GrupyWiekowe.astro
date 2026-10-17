@@ -1,0 +1,57 @@
+---
+// Przegląd grup metodycznych: znak, nazwa, wiek i jedno zdanie. Dla rodziców: „dla kogo jest harcerstwo”.
+// Domyślne opisy można nadpisać (`opisy`) albo ograniczyć listę grup (`grupy`), np. gdy jednostka nie ma wędrowników.
+import ZnakGrupy from './ZnakGrupy.astro';
+import type { KluczGrupy } from '../lib/grupy';
+
+interface Props {
+  grupy?: KluczGrupy[];
+  opisy?: Partial<Record<KluczGrupy, string>>;
+  /** Link „Znajdź drużynę” pod każdą grupą (np. do /jednostki#zuchy). */
+  linkDo?: string;
+}
+
+const DOMYSLNE: Partial<Record<KluczGrupy, string>> = {
+  zuchy: 'Gromady zuchowe: nauka przez zabawę, przygoda i pierwsze sprawności.',
+  harcerze: 'Drużyny harcerskie: biwaki, rajdy, obozy i praca w zastępie.',
+  'harcerze-starsi': 'Drużyny starszoharcerskie: wyzwania, samodzielność i odpowiedzialność.',
+  wedrownicy: 'Drużyny wędrownicze: służba, wędrówka i własne projekty.',
+  'nieprzetarty-szlak': 'Drużyny dla osób z niepełnosprawnościami: harcerstwo na miarę możliwości.',
+};
+
+const { grupy = ['zuchy', 'harcerze', 'harcerze-starsi', 'wedrownicy'], opisy = {}, linkDo } = Astro.props;
+---
+
+<ul class="zhp-grupy-wiekowe">
+  {
+    grupy.map((g) => (
+      <li>
+        <ZnakGrupy grupa={g} />
+        {(opisy[g] ?? DOMYSLNE[g]) && <p>{opisy[g] ?? DOMYSLNE[g]}</p>}
+        {linkDo && <a href={`${linkDo}#${g}`}>Znajdź drużynę</a>}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .zhp-grupy-wiekowe {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--zhp-space-8) var(--zhp-space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .zhp-grupy-wiekowe li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--zhp-space-3);
+  }
+  .zhp-grupy-wiekowe p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 22px;
+  }
+</style>

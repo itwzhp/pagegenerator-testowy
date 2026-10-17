@@ -1,0 +1,41 @@
+---
+// Znak grupy metodycznej z nazwą i wiekiem (DESIGN.md §9, §10 GroupBadge).
+// Grupy członkowskie nie mają jeszcze oficjalnych znaków: wtedy pokazujemy samą nazwę.
+import zuchy from '../assets/znaki/znak-zuchy.png';
+import harcerze from '../assets/znaki/znak-harcerze.png';
+import harcerzeStarsi from '../assets/znaki/znak-harcerze-starsi.png';
+import wedrownicy from '../assets/znaki/znak-wedrownicy.png';
+import zuchyBialy from '../assets/znaki/znak-zuchy-white.svg';
+import harcerzeBialy from '../assets/znaki/znak-harcerze-white.svg';
+import harcerzeStarsiBialy from '../assets/znaki/znak-harcerze-starsi-white.svg';
+import wedrownicyBialy from '../assets/znaki/znak-wedrownicy-white.svg';
+import { GRUPY, type KluczGrupy } from '../lib/grupy';
+
+interface Props {
+  grupa: KluczGrupy;
+  /** `bialy` na ciemnym lub kolorowym tle. */
+  wariant?: 'kolor' | 'bialy';
+  rozmiar?: 'duzy' | 'maly';
+  /** Pokaż przedział wieku pod nazwą. */
+  wiek?: boolean;
+}
+
+const ZNAKI: Partial<Record<KluczGrupy, { kolor: ImageMetadata; bialy: ImageMetadata }>> = {
+  zuchy: { kolor: zuchy, bialy: zuchyBialy },
+  harcerze: { kolor: harcerze, bialy: harcerzeBialy },
+  'harcerze-starsi': { kolor: harcerzeStarsi, bialy: harcerzeStarsiBialy },
+  wedrownicy: { kolor: wedrownicy, bialy: wedrownicyBialy },
+};
+
+const { grupa, wariant = 'kolor', rozmiar = 'duzy', wiek = true } = Astro.props;
+const dane = GRUPY[grupa];
+const znak = ZNAKI[grupa]?.[wariant];
+---
+
+<span class:list={['zhp-group', rozmiar === 'maly' && 'zhp-group--sm']}>
+  {znak && <img src={znak.src} alt="" width="48" height="48" />}
+  <span>
+    <span class="zhp-group-name">{dane.nazwa}</span>
+    {wiek && dane.wiek && <span class="zhp-group-age">{dane.wiek}</span>}
+  </span>
+</span>
